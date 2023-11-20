@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 pylint = "*"
 black = "*"
+librosa = "*"
+flask = "*"
+numpy = "*"
+scikit-learn = "*"
 
 [dev-packages]
 
