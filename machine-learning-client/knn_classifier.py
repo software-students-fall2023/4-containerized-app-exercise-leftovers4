@@ -1,3 +1,16 @@
+"""
+This module includes functionality for loading a pre-trained K-Nearest Neighbors (KNN) 
+machine learning model and classifying the genre of an audio file using that model. It 
+contains two primary functions: `load_model` to load the trained KNN model from a file, 
+and `classify_genre` to predict the genre of a given audio file. The module also 
+includes a main script section that tests the classify function given an example file.
+
+The `load_model` function handles the loading of the model and ensures that appropriate 
+errors are raised in case of issues like the model file not being found. The `classify_genre`
+function integrates feature extraction (using an external module `feature_extraction`) and 
+the model's prediction capabilities to determine the music genre of an audio file.
+"""
+
 import pickle
 import os
 import numpy as np

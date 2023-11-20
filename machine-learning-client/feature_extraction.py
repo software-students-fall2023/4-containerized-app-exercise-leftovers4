@@ -1,3 +1,8 @@
+"""
+This module provides functionality for audio feature extraction and processing,
+including the standardization of arrays to a fixed length.
+"""
+
 import librosa
 import numpy as np
 
@@ -15,7 +20,7 @@ def standardize_array(array, fixed_length):
     """
     if len(array) > fixed_length:
         return array[:fixed_length]
-    elif len(array) < fixed_length:
+    if len(array) < fixed_length:
         return np.pad(array, (0, fixed_length - len(array)), mode = 'constant')
     return array
 
@@ -40,33 +45,21 @@ def extract_features(file_path):
         raise ValueError(f"Error processing audio file at {file_path}: {e}") from e
 
     fixed_length = 7500
-    audio, sample_rate = librosa.load(file_path, res_type = 'kaiser_fast')
 
-    mfccs = librosa.feature.mfcc(y = audio, sr = sample_rate, n_mfcc = 40)
-    mfccs_processed = np.mean(mfccs.T, axis = 0)
-
-    chroma = librosa.feature.chroma_stft(y = audio, sr = sample_rate).T
-    chroma_processed = standardize_array(np.mean(chroma.T, axis = 0),
-                                        fixed_length)
-
-    mel = librosa.feature.melspectrogram(y = audio, sr = sample_rate)
-    mel_processed = np.mean(mel.T,axis = 0)
-
-    spectral_contrast = librosa.feature.spectral_contrast(y = audio,
-                                                        sr = sample_rate)
-    spectral_contrast_processed = np.mean(spectral_contrast.T, axis = 0)
-
-    tonnetz = librosa.feature.tonnetz(y = audio, sr = sample_rate).T
-    tonnetz_processed = standardize_array(np.mean(tonnetz.T, axis = 0),
-                                        fixed_length)
-
-    tempo, _ = librosa.beat.beat_track(y = audio, sr = sample_rate)
-    tempo_feature = np.array([tempo])
-
+    # Feature extraction
+    mfccs = np.mean(librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40).T, axis=0)
+    chroma = standardize_array(np.mean(librosa.feature.chroma_stft(y = audio, sr = sample_rate).T,
+                                       axis = 0), fixed_length)
+    mel = np.mean(librosa.feature.melspectrogram(y=audio, sr=sample_rate).T, axis=0)
+    spectral_contrast = np.mean(librosa.feature.spectral_contrast(y = audio, sr = sample_rate).T,
+                                axis = 0)
+    tonnetz = standardize_array(np.mean(librosa.feature.tonnetz(y=audio, sr=sample_rate).T,
+                                        axis=0), fixed_length)
+    tempo_feature = np.array([librosa.beat.beat_track(y=audio, sr=sample_rate)[0]])
     song_length = np.array([len(audio) / sample_rate])
 
-    features = np.hstack([mfccs_processed,chroma_processed,mel_processed,
-                        spectral_contrast_processed,tonnetz_processed,
-                        tempo_feature,song_length])
+    # Combine all features
+    features = np.hstack([mfccs, chroma, mel, spectral_contrast, tonnetz,
+                        tempo_feature, song_length])
 
     return features

@@ -1,3 +1,22 @@
+"""
+This module implements a Flask web application to classify the genre of audio files. 
+It provides an API endpoint `/classify` that accepts audio files through POST requests 
+and uses a pre-trained K-Nearest Neighbors (KNN) model to predict their genres.
+
+The application loads the pre-trained KNN model from a file upon startup. The `/classify`
+endpoint then processes any uploaded audio file, extracts its features using the 
+`feature_extraction` module, predicts the genre with the KNN model, and returns the 
+prediction as a JSON response.
+
+The server runs on port 5001 and listens on all network interfaces, making it accessible 
+remotely.
+
+How to Use:
+- Run the script to start the Flask server.
+- Send a POST request to '/classify' with an audio file attached with the key 'audioFile'.
+- Receive the genre prediction in JSON format in response.
+"""
+
 import pickle
 import os
 from flask import Flask, request, jsonify

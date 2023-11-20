@@ -1,3 +1,26 @@
+"""
+This module is designed to train a (KNN) classifier for music genre classification. 
+It processes audio files from different genres, extracts features, and trains the KNN model 
+based on these features. The script supports training on multiple genres and evaluates performance 
+of the model using standard metrics like accuracy, classification report, and confusion matrix.
+
+The script allows the user to specify the base folder path containing the genre-specific subfolders 
+and the list of genres to be processed. The trained model is then saved to a file for future use.
+
+This file is mainly meant to be run on a local system to output the trained model as training takes
+significant time and resources.
+
+Functions:
+- process_music_genre: Processes audio files in a genre and returns features and labels.
+- process_all_genres: Processes audio files across multiple genre folders.
+- train_and_evaluate_knn: Trains the KNN classifier and evaluates its performance.
+
+Usage:
+- Run the script and input the base folder path when prompted.
+- The script processes the audio files, trains the KNN model, and outputs its performance.
+- The trained model is saved as 'knn_classifier.pkl'.
+"""
+
 import pickle
 import os
 import numpy as np
@@ -74,28 +97,19 @@ def train_and_evaluate_knn(
     Returns:
     tuple: Returns the classifier and the test results.
     """
-    # Process all genres and get the combined features and labels
+    # Process all genres for features and labels, then split into training and testing sets.
     features, labels = process_all_genres(input_base_folder_path, all_genres)
+    x_train, x_test, y_train, y_test = train_test_split(np.array(features),
+                                                    np.array(labels),
+                                                    test_size=test_size,
+                                                    random_state=42)
 
-    # Convert lists to numpy arrays for ML processing
-    features_array = np.array(features)
-    labels_array = np.array(labels)
-
-    # Splitting the dataset into training and testing sets
-    x_train, x_test, y_train, y_test = train_test_split(
-        features_array, labels_array, test_size = test_size, random_state = 42
-    )
-
-    # Initialize the KNN classifier
-    knn = KNeighborsClassifier(n_neighbors = n_neighbors)
-
-    # Train the classifier
+    # Initialize and train the KNN classifier
+    knn = KNeighborsClassifier(n_neighbors=n_neighbors)
     knn.fit(x_train, y_train)
 
-    # Predict the labels for the test set
+    # Predict and evaluate the classifier
     y_pred = knn.predict(x_test)
-
-    # Evaluate the classifier
     accuracy = accuracy_score(y_test, y_pred)
     report = classification_report(y_test, y_pred)
     confusion = confusion_matrix(y_test, y_pred)
