@@ -16,6 +16,7 @@ import os
 import numpy as np
 import feature_extraction
 
+
 def load_model(model_path):
     """
     Load a pre-trained KNN model from the specified file.
@@ -27,10 +28,12 @@ def load_model(model_path):
     object: The loaded model object, ready for making predictions.
     """
     try:
-        with open(model_path, 'rb') as file:
+        with open(model_path, "rb") as file:
             return pickle.load(file)
     except FileNotFoundError as exc:
-        raise FileNotFoundError(f"No model file found at specified path: {model_path}") from exc
+        raise FileNotFoundError(
+            f"No model file found at specified path: {model_path}"
+        ) from exc
     except Exception as e:
         raise RuntimeError(f"Error loading model from file: {e}") from e
 
@@ -56,9 +59,10 @@ def classify_genre(audio_path, model):
 
     return genre_prediction[0]
 
+
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    MODEL_PATH = os.path.join(script_dir, 'knn_classifier.pkl')
+    MODEL_PATH = os.path.join(script_dir, "knn_classifier.pkl")
     knn_model = load_model(MODEL_PATH)
 
     # Path to new audio

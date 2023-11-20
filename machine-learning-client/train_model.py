@@ -32,7 +32,7 @@ from sklearn.metrics import accuracy_score
 import feature_extraction
 
 
-def process_music_genre(folder_path,genre):
+def process_music_genre(folder_path, genre):
     """
     Processes all audio files in a given genre folder.
 
@@ -41,7 +41,7 @@ def process_music_genre(folder_path,genre):
     genre (str): The genre label for the songs in the folder.
 
     Returns:
-    tuple: 
+    tuple:
         - features_list (list): A list of feature arrays from each audio file.
         - labels_list (list): A list of genre labels for each audio file.
     """
@@ -66,7 +66,7 @@ def process_all_genres(base_folder_path, genres):
     genres (list): List of genres to be processed.
 
     Returns:
-    tuple: 
+    tuple:
         - all_features (list): Aggregated list of features from all genres.
         - all_labels (list): Aggregated list of genre label for features.
     """
@@ -83,7 +83,7 @@ def process_all_genres(base_folder_path, genres):
 
 
 def train_and_evaluate_knn(
-        input_base_folder_path, all_genres, test_size = 0.2, n_neighbors = 5
+    input_base_folder_path, all_genres, test_size=0.2, n_neighbors=5
 ):
     """
     Processes music data and trains a KNN classifier.
@@ -99,10 +99,9 @@ def train_and_evaluate_knn(
     """
     # Process all genres for features and labels, then split into training and testing sets.
     features, labels = process_all_genres(input_base_folder_path, all_genres)
-    x_train, x_test, y_train, y_test = train_test_split(np.array(features),
-                                                    np.array(labels),
-                                                    test_size=test_size,
-                                                    random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(
+        np.array(features), np.array(labels), test_size=test_size, random_state=42
+    )
 
     # Initialize and train the KNN classifier
     knn = KNeighborsClassifier(n_neighbors=n_neighbors)
@@ -120,14 +119,23 @@ def train_and_evaluate_knn(
 
     return knn, (accuracy, report, confusion)
 
+
 if __name__ == "__main__":
     genres_list = [
-        'Rock', 'Pop', 'Jazz', 'Classical', 'HipHopAndRap', 
-        'EDM', 'Country', 'Reggae', 'R&BAndSoul', 'Disco'
+        "Rock",
+        "Pop",
+        "Jazz",
+        "Classical",
+        "HipHopAndRap",
+        "EDM",
+        "Country",
+        "Reggae",
+        "R&BAndSoul",
+        "Disco"
     ]
     base_path = input("Enter the file path: ")
 
     # Train the KNN classifier and evaluate its performance
     classifier, results = train_and_evaluate_knn(base_path, genres_list)
-    with open('knn_classifier.pkl', 'wb') as outfile:
+    with open("knn_classifier.pkl", "wb") as outfile:
         pickle.dump(classifier, outfile)
