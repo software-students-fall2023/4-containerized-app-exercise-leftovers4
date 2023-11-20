@@ -10,6 +10,7 @@ librosa = "*"
 flask = "*"
 numpy = "*"
 scikit-learn = "*"
+resampy = "*"
 
 [dev-packages]
 
