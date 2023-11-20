@@ -1,6 +1,7 @@
 import numpy as np
 import feature_extraction
 
+
 def test_standardize_array_truncate():
     """Test if the array is correctly truncated to the specified length."""
     input_array = np.array([1, 2, 3, 4, 5])

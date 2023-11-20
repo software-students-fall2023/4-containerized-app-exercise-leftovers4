@@ -29,13 +29,14 @@ model_path = os.path.join(script_dir, "knn_classifier.pkl")
 with open("model_path", "rb") as file:
     model = pickle.load(file)
 
+
 @app.route("/classify", methods=["POST"])
 def classify_audio():
     """
     API endpoint to classify the genre of an uploaded audio file.
 
     This function handles POST requests for an audio file. It extracts
-    features from the audio, predicts the genre using the pre-trained KNN model, 
+    features from the audio, predicts the genre using the pre-trained KNN model,
     and returns the genre prediction in JSON format.
 
     The audio file should be included in the request's files with the key 'audioFile'.
@@ -55,6 +56,7 @@ def classify_audio():
         return jsonify({"genre": genre_prediction[0]})
 
     return "No audio file found", 400
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)

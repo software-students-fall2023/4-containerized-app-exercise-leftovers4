@@ -36,7 +36,9 @@ def extract_features(file_path):
     numpy.ndarray: Extracted feature array.
     """
     # Check if the file is a .wav or .mp3 file.
-    if not file_path.lower().endswith(".wav") and not file_path.lower().endswith(".mp3"):
+    if not file_path.lower().endswith(".wav") and not file_path.lower().endswith(
+        ".mp3"
+    ):
         raise ValueError(f"The file at {file_path} is not a .wav or .mp3 file.")
     # Exception if audio processing fails.
     try:
@@ -50,7 +52,7 @@ def extract_features(file_path):
     mfccs = np.mean(librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40).T, axis=0)
     chroma = standardize_array(
         np.mean(librosa.feature.chroma_stft(y=audio, sr=sample_rate).T, axis=0),
-        fixed_length
+        fixed_length,
     )
     mel = np.mean(librosa.feature.melspectrogram(y=audio, sr=sample_rate).T, axis=0)
     spectral_contrast = np.mean(
@@ -58,7 +60,7 @@ def extract_features(file_path):
     )
     tonnetz = standardize_array(
         np.mean(librosa.feature.tonnetz(y=audio, sr=sample_rate).T, axis=0),
-        fixed_length
+        fixed_length,
     )
     tempo_feature = np.array([librosa.beat.beat_track(y=audio, sr=sample_rate)[0]])
     song_length = np.array([len(audio) / sample_rate])

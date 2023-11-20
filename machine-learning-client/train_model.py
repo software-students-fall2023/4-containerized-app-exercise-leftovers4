@@ -131,7 +131,7 @@ if __name__ == "__main__":
         "Country",
         "Reggae",
         "R&BAndSoul",
-        "Disco"
+        "Disco",
     ]
     base_path = input("Enter the file path: ")
 

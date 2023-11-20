@@ -37,6 +37,7 @@ def load_model(model_path):
     except Exception as e:
         raise RuntimeError(f"Error loading model from file: {e}") from e
 
+
 def classify_genre(audio_path, model):
     """
     Classify the genre of an audio file using a pre-trained model.

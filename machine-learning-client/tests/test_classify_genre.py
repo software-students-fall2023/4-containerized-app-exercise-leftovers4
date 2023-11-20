@@ -2,8 +2,8 @@ import unittest
 from unittest.mock import Mock, patch
 import knn_classifier
 
-class TestClassifyGenre(unittest.TestCase):
 
+class TestClassifyGenre(unittest.TestCase):
     @patch("feature_extraction.extract_features")
     @patch("knn_classifier.load_model")
     def test_successful_classification(self, mock_load_model, mock_extract_features):
@@ -19,7 +19,6 @@ class TestClassifyGenre(unittest.TestCase):
 
         self.assertEqual(result, "Rock")
 
-
     @patch("feature_extraction.extract_features", side_effect=FileNotFoundError)
     def test_invalid_audio_file(self, mock_extract_features):
         """
@@ -31,7 +30,6 @@ class TestClassifyGenre(unittest.TestCase):
 
         with self.assertRaises(FileNotFoundError):
             knn_classifier.classify_genre(audio_path, model)
-
 
     @patch("feature_extraction.extract_features")
     @patch("knn_classifier.load_model")
