@@ -1,10 +1,9 @@
-from pymongo import MongoClient
 import os
-from db import db
-from bson import json_util
+import random
+from pymongo import MongoClient
+# from db import database
 from bson import Binary
 from audio import record_audio
-import random
 
 from flask import (
     Flask,
@@ -16,7 +15,7 @@ from flask import (
 
 # connecting to database
 client = MongoClient(os.getenv("MONGODB_URI"))
-db = client[os.getenv("MONGODB_DATABASE")]
+# db = client[os.getenv("MONGODB_DATABASE")]
 collection = db[os.getenv("MONGODB_COLLECTION")]
 
 app = Flask(__name__)
@@ -34,7 +33,8 @@ def home():
     duration = 10
     return render_template('home.html', countdown = duration, title="Home")
 
-# starts recording through 'record_audio' function in 'audio.py' and saves to current directory (web_app folder)
+# starts recording through 'record_audio' function in 'audio.py' 
+# and saves to current directory (web_app folder)
 # current recording duration is 10 seconds
 # database --> opens .wav file, converts to binary, and adds to database
 @app.route('/start-recording', methods=['POST'])
@@ -44,7 +44,7 @@ def start_recording():
     file_name = 'output' + str(rand_num) + '.wav'
     curr_dirr = cwd + '/audio_files/' + file_name
     duration = 10
-    record_audio(curr_dirr, duration=duration+1) 
+    record_audio(curr_dirr, duration=duration+1)
     
     with open(curr_dirr, 'rb') as file:
         audio_data = Binary(file.read())
@@ -58,7 +58,6 @@ def start_recording():
     ## grid fs (?)
     # file_id = db.put(audio_data, filename="audiofile2.wav")
     # audio_file = fs.get(file_id)
-    
     return render_template('home.html', title="Home")
 
 if __name__ == '__main__':

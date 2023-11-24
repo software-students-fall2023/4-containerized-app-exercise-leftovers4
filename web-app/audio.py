@@ -1,6 +1,6 @@
-import pyaudio
 import wave
 import os
+import pyaudio
 
 cwd = os.getcwd()
 
