@@ -1,0 +1,1 @@
+Code related to mongodb database and requirements go in this folder.
