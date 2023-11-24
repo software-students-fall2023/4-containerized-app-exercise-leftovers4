@@ -1,31 +1,17 @@
-from flask import (
-    Flask,
-    render_template,
-    request,
-    redirect,
-    url_for,
-    make_response,
-    session,
-)
-
-import pymongo
-import re
-from bson.objectid import ObjectId
 from pymongo import MongoClient
 import os
 from db import db
 from bson import json_util
 from bson import Binary
-import json
 from audio import record_audio
-from gridfs import GridFS
-from gridfs import GridFSBucket
 import random
 
-
-def parse_json(data):
-    return json.loads(json_util.dumps(data))
-
+from flask import (
+    Flask,
+    render_template,
+    redirect,
+    url_for,
+)
 # audioFiles = db[os.getenv("MONGODB_COLLECTION")]
 
 # connecting to database
