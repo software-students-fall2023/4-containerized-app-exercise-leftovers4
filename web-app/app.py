@@ -57,13 +57,13 @@ def start_recording():
 
     with open(curr_dirr, 'rb') as file:
         audio_data = Binary(file.read())
-        
+
     audio_document = {
         "name": file_name,
         "audio_data": audio_data
     }
     collection.insert_one(audio_document)
-    
+
     ## grid fs (?)
     # file_id = db.put(audio_data, filename="audiofile2.wav")
     # audio_file = fs.get(file_id)
