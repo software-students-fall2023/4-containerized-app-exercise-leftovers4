@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+  <body>
+    <header class="headerContainer">
+      {% if title%}
+      <div class="title"><h1>{{title}}</h1></div>
+      {% endif %}
+    </header>
+
+    <main>{% block container %} {% endblock %}</main>
+
+    <footer></footer>
+  </body>
+</html>
