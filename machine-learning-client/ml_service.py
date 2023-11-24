@@ -1,62 +1,51 @@
 """
-This module implements a Flask web application to classify the genre of audio files. 
-It provides an API endpoint `/classify` that accepts audio files through POST requests 
-and uses a pre-trained K-Nearest Neighbors (KNN) model to predict their genres.
+This module periodically accesses a MongoDB database to classify unclassified
+audio files using a pre-trained KNN model. It is designed to run continuously,
+checking the database at regular intervals for audio files that have not been
+classified and updating their genre using the KNN model.
 
-The application loads the pre-trained KNN model from a file upon startup. The `/classify`
-endpoint then processes any uploaded audio file, extracts its features using the 
-`feature_extraction` module, predicts the genre with the KNN model, and returns the 
-prediction as a JSON response.
+The script loads a pre-trained KNN model from a file and establishes a connection
+with the MongoDB database. It then iteratively processes unclassified audio files:
+it retrieves the binary audio data from each file, uses the `feature_extraction`
+module to extract features from the audio, applies the KNN model to predict the
+genre, and updates the database record with the predicted genre.
 
-The server runs on port 5001 and listens on all network interfaces, making it accessible 
-remotely.
+This script is intended to run as a background process, periodically
+waking up to check for new unclassified audio files in the database.
 
-How to Use:
-- Run the script to start the Flask server.
-- Send a POST request to '/classify' with an audio file attached with the key 'audioFile'.
-- Receive the genre prediction in JSON format in response.
+Usage Instructions:
+- Ensure the MongoDB database is accessible and contains audio data.
+- The script assumes environment variables for MongoDB connection are set.
+- Run the script; it will periodically classify audio files in the database.
 """
 
-import pickle
+
 import os
-from flask import Flask, request, jsonify
-from feature_extraction import extract_features
+import time
+import knn_classifier
+from pymongo import MongoClient
 
-app = Flask(__name__)
+# Load the model
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+valid_model_path = os.path.join(parent_dir, "knn_classifier.pkl")
+model = knn_classifier.load_model(valid_model_path)
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(script_dir, "knn_classifier.pkl")
-with open("model_path", "rb") as file:
-    model = pickle.load(file)
+# Database connection
+client = MongoClient(os.getenv("MONGODB_URI"))
+database = client[os.getenv("MONGODB_DATABASE")]
+collection = database[os.getenv("MONGODB_COLLECTION")]
 
 
-@app.route("/classify", methods=["POST"])
-def classify_audio():
-    """
-    API endpoint to classify the genre of an uploaded audio file.
-
-    This function handles POST requests for an audio file. It extracts
-    features from the audio, predicts the genre using the pre-trained KNN model,
-    and returns the genre prediction in JSON format.
-
-    The audio file should be included in the request's files with the key 'audioFile'.
-
-    Returns:
-        On success: A JSON response containing the predicted genre.
-        On failure: A JSON response with an error message, if the 'audioFile' key is not found.
-    """
-    if "audioFile" in request.files:
-        audio_file = request.files["audioFile"]
-
-        # Process the audio file
-        features = extract_features(audio_file)
-        features_reshaped = features.reshape(1, -1)
-        genre_prediction = model.predict(features_reshaped)
-
-        return jsonify({"genre": genre_prediction[0]})
-
-    return "No audio file found", 400
+def classify_undetermined():
+    """Fetch and classify audio files from the database that haven't been classified."""
+    unclassified = collection.find({"genre": {"$exists": False}})   
+    for audio in unclassified:
+        genre = knn_classifier.classify_genre(audio['audio_data'], model)
+        collection.update_one({"_id": audio["_id"]}, {"$set": {"genre": genre}})
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5001)
+    while True:
+        classify_undetermined()
+        time.sleep(30)  # wait for 30 seconds before checking again

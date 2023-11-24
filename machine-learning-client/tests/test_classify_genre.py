@@ -1,3 +1,4 @@
+import io
 import unittest
 from unittest.mock import Mock, patch
 import knn_classifier
@@ -14,22 +15,22 @@ class TestClassifyGenre(unittest.TestCase):
 
         mock_extract_features.return_value = [0.5, 0.2, 0.3]
 
-        audio_path = "sample.wav"
-        result = knn_classifier.classify_genre(audio_path, mock_load_model())
+        audio_info = io.BytesIO(b"binary audio data").read()
+        result = knn_classifier.classify_genre(audio_info, mock_load_model())
 
         self.assertEqual(result, "Rock")
 
-    @patch("feature_extraction.extract_features", side_effect=FileNotFoundError)
+    @patch("feature_extraction.extract_features", side_effect=ValueError)
     def test_invalid_audio_file(self, mock_extract_features):
         """
         Test the classify_genre function's response to an invalid audio file path.
         This test ensures that an exception is raised when an invalid file path is provided.
         """
-        audio_path = "invalid_classifier.wav"
+        audio_data = b""
         model = Mock()
 
-        with self.assertRaises(FileNotFoundError):
-            knn_classifier.classify_genre(audio_path, model)
+        with self.assertRaises(ValueError):
+            knn_classifier.classify_genre(audio_data, model)
 
     @patch("feature_extraction.extract_features")
     @patch("knn_classifier.load_model")
@@ -44,8 +45,7 @@ class TestClassifyGenre(unittest.TestCase):
         mock_model.predict.side_effect = RuntimeError
         mock_load_model.return_value = mock_model
 
-        audio_path = "abc.wav"
+        audio_data = io.BytesIO(b"binary audio data").read()
 
-        # Action & Assert
         with self.assertRaises(RuntimeError):
-            knn_classifier.classify_genre(audio_path, mock_load_model())
+            knn_classifier.classify_genre(audio_data, mock_load_model())
