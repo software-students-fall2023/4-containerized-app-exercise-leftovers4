@@ -10,5 +10,5 @@ database = None
 
 # Send a ping to confirm a successful connection
 client.admin.command('ping')
-database = client[os.getenv('MONGODB_DATABASE')]
+DATABASE = client[os.getenv('MONGODB_DATABASE')]
 print("Pinged your deployment. You successfully connected to MongoDB!")

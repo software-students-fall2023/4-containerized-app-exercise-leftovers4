@@ -25,6 +25,7 @@ jobs:
           pipenv lock
           pipenv sync --dev --python $(which python)
           pipenv shell --fancy --python $(which python)
+          pipenv install python-dotenv
 
       - name: Lint with pylint
         if: ${{ hashFiles('**/*.py') != '' }}

@@ -1,10 +1,16 @@
 import wave
-import os
 import pyaudio
 
-cwd = os.getcwd()
+def record_audio(filename, duration=5, rate=44100, chunk=1024, channels=1):
+    """Records audio from microphone
 
-def record_audio(filename=cwd, duration=5, rate=44100, chunk=1024, channels=1):
+    Args:
+        filename (string): File Name
+        duration (int): Duration. Defaults to 5.
+        rate (int): Bitrate. Defaults to 44100.
+        chunk (int): Chunk size. Defaults to 1024.
+        channels (int): Number of channels. Defaults to 1.
+    """
     p = pyaudio.PyAudio()
 
     stream = p.open(format=pyaudio.paInt16,
