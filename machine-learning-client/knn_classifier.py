@@ -60,6 +60,7 @@ def load_model(model_path):
 
 #     return genre_prediction[0]
 
+
 def classify_genre(audio_data, model):
     """
     Classify the genre of an audio data using a pre-trained model.

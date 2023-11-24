@@ -72,6 +72,7 @@ def standardize_array(array, fixed_length):
 
 #     return features
 
+
 def extract_features(audio_data, sample_rate=44100):
     """
     Extract audio features from an in-memory audio data.
