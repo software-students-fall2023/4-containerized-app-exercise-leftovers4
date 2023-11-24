@@ -6,6 +6,15 @@ name = "pypi"
 [packages]
 pylint = "*"
 black = "*"
+librosa = "*"
+flask = "*"
+numpy = "*"
+scikit-learn = "*"
+resampy = "*"
+pyaudio = "*"
+wave = "*"
+pymongo = "*"
+typing-extensions = "*"
 
 [dev-packages]
 
