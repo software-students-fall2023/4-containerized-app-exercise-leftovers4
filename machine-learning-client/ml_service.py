@@ -39,7 +39,7 @@ collection = database[os.getenv("MONGODB_COLLECTION")]
 
 def classify_undetermined():
     """Fetch and classify audio files from the database that haven't been classified."""
-    unclassified = collection.find({"genre": {"$exists": False}})   
+    unclassified = collection.find({"genre": {"$exists": False}})
     for audio in unclassified:
         genre = knn_classifier.classify_genre(audio['audio_data'], model)
         collection.update_one({"_id": audio["_id"]}, {"$set": {"genre": genre}})
