@@ -1,7 +1,9 @@
+"""app.py
+
+    """
 import os
 import random
 from pymongo import MongoClient
-from db import DATABASE
 from bson import Binary
 from audio import record_audio
 
@@ -11,7 +13,6 @@ from flask import (
     redirect,
     url_for,
 )
-# audioFiles = db[os.getenv("MONGODB_COLLECTION")]
 
 # connecting to database
 client = MongoClient(os.getenv("MONGODB_URI"))
@@ -40,10 +41,6 @@ def home():
     duration = 10
     return render_template('home.html', countdown = duration, title="Home")
 
-# starts recording through 'record_audio' function in 'audio.py' 
-# and saves to current directory (web_app folder)
-# current recording duration is 10 seconds
-# database --> opens .wav file, converts to binary, and adds to database
 @app.route('/start-recording', methods=['POST'])
 def start_recording():
     """Records and adds files to database

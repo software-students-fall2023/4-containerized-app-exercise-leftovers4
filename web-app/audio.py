@@ -1,3 +1,5 @@
+"""audio.py
+    """
 import wave
 import pyaudio
 
