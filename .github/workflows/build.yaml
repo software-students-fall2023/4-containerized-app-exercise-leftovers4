@@ -36,6 +36,8 @@ jobs:
           pipenv install python-dotenv
 
       - name: Run tests with pytest
+        env:
+          PYTHONPATH: ${{ github.workspace }}/machine-learning-client
         run: |
           cd machine-learning-client
           pipenv run pytest tests/
