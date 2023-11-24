@@ -6,9 +6,6 @@ name = "pypi"
 [packages]
 pylint = "*"
 black = "*"
-pyaudio = "*"
-wave = "*"
-pymongo = "*"
 
 [dev-packages]
 
