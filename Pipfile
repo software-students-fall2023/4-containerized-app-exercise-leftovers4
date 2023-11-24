@@ -15,6 +15,7 @@ pyaudio = "*"
 wave = "*"
 pymongo = "*"
 typing-extensions = "*"
+pytest = "*"
 
 [dev-packages]
 
