@@ -82,17 +82,17 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
             mkdir -p /var/www/myapp
-            # Zip the entire repository
+            # Create a tarball of the entire repository
             cd $GITHUB_WORKSPACE
-            zip -r myapp.zip .
+            tar -czf myapp.tar.gz .
 
-            # Transfer the zipped repository
-            scp -o StrictHostKeyChecking=no myapp.zip root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www
+            # Transfer the tarball to the server
+            scp -o StrictHostKeyChecking=no myapp.tar.gz root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www
 
-            # SSH commands to unzip and start the application
+            # SSH commands to extract and start the application
             ssh root@${{ secrets.DIGITALOCEAN_DROPLET_IP }} "
               mkdir -p /var/www/myapp && 
-              unzip /var/www/myapp.zip -d /var/www/myapp && 
+              tar -xzf /var/www/myapp.tar.gz -C /var/www/myapp && 
               cd /var/www/myapp && 
               docker-compose pull && 
               docker-compose down && 
