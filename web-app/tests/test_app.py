@@ -1,16 +1,21 @@
 import pytest
+import os
 from flask import template_rendered, Flask
 from contextlib import contextmanager
 from io import BytesIO
 import app
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 @pytest.fixture
 def client():
     """a client fixture"""
-    appl = app.create_app()  # Create an instance of your Flask app
-    # appl.config["TESTING"] = True
-
+     os.environ['MONGODB_DATABASE'] = 'test_database'
+    appl = app.create_app()
+    appl.config["TESTING"] = True    
     with appl.test_client() as client:
         yield client
 
