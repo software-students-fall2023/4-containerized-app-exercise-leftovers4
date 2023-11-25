@@ -82,6 +82,19 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
             mkdir -p /var/www/myapp
+            # Zip the entire repository
             cd $GITHUB_WORKSPACE
-            scp -o StrictHostKeyChecking=no docker-compose.yaml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp
-            ssh root@${{ secrets.DIGITALOCEAN_DROPLET_IP }} "cd /var/www/myapp && docker-compose pull && docker-compose down && docker-compose up -d"
+            zip -r myapp.zip .
+
+            # Transfer the zipped repository
+            scp -o StrictHostKeyChecking=no myapp.zip root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www
+
+            # SSH commands to unzip and start the application
+            ssh root@${{ secrets.DIGITALOCEAN_DROPLET_IP }} "
+              mkdir -p /var/www/myapp && 
+              unzip /var/www/myapp.zip -d /var/www/myapp && 
+              cd /var/www/myapp && 
+              docker-compose pull && 
+              docker-compose down && 
+              docker-compose up -d
+      "
