@@ -79,7 +79,7 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
             mkdir -p /var/www/myapp
-            scp -o StrictHostKeyChecking=no docker-compose.yml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp
+            scp -o StrictHostKeyChecking=no $GITHUB_WORKSPACE/docker-compose.yml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp
             cd /var/www/myapp
             docker-compose pull
             docker-compose down
