@@ -6,7 +6,7 @@ import feature_extraction
 
 def test_feature_array_shape():
     """Test if the feature array has the correct shape."""
-    expected_length = 15000 + 40 + 128 + 7 + 1 + 1
+    expected_length = 40 + 128 + 7 + 1 + 1
     current_dir = os.path.dirname(os.path.abspath(__file__))
     audio_file = os.path.join(current_dir, "sample.wav")
     with open(audio_file, "rb") as file:

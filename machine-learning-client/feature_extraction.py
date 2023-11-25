@@ -94,24 +94,24 @@ def extract_features(audio_data, sample_rate=44100):
 
     # Feature extraction
     mfccs = np.mean(librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40).T, axis=0)
-    chroma = standardize_array(
-        np.mean(librosa.feature.chroma_stft(y=audio, sr=sample_rate).T, axis=0),
-        fixed_length,
-    )
+    # chroma = standardize_array(
+    #     np.mean(librosa.feature.chroma_stft(y=audio, sr=sample_rate).T, axis=0),
+    #     fixed_length,
+    # )
     mel = np.mean(librosa.feature.melspectrogram(y=audio, sr=sample_rate).T, axis=0)
     spectral_contrast = np.mean(
         librosa.feature.spectral_contrast(y=audio, sr=sample_rate).T, axis=0
     )
-    tonnetz = standardize_array(
-        np.mean(librosa.feature.tonnetz(y=audio, sr=sample_rate).T, axis=0),
-        fixed_length,
-    )
+    # tonnetz = standardize_array(
+    #     np.mean(librosa.feature.tonnetz(y=audio, sr=sample_rate).T, axis=0),
+    #     fixed_length,
+    # )
     tempo_feature = np.array([librosa.beat.beat_track(y=audio, sr=sample_rate)[0]])
     song_length = np.array([len(audio) / sample_rate])
 
     # Combine all features
     features = np.hstack(
-        [mfccs, chroma, mel, spectral_contrast, tonnetz, tempo_feature, song_length]
+        [mfccs, mel, spectral_contrast, tempo_feature, song_length]
     )
 
     return features
