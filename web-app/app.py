@@ -29,6 +29,7 @@ def convert_to_wav(input_data):
     input_data (bytes): The input audio data.
     input_format (str): The format of the input audio data.
     
+
     Returns:
     bytes: The converted audio data in WAV format.
     """
@@ -36,9 +37,20 @@ def convert_to_wav(input_data):
         temp_input.write(input_data)
 
     output_file = "temp_output_file.wav"
-    command = ["ffmpeg", "-i", "temp_input_file", "-ar", "44100", "-ac", "2", output_file]
+    command = [
+        "ffmpeg",
+        "-i",
+        "temp_input_file",
+        "-ar",
+        "44100",
+        "-ac",
+        "2",
+        output_file,
+    ]
     try:
-        subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        subprocess.run(
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True
+        )
     except subprocess.CalledProcessError as e:
         print("An error occurred while converting the file: ", e)
         return None
@@ -50,16 +62,19 @@ def convert_to_wav(input_data):
     os.remove(output_file)
     return wav_data
 
+
 @app.route("/")
 def index():
     """Index route"""
     return redirect(url_for("home"))
+
 
 @app.route("/home")
 def home():
     """Home route"""
     duration = 10
     return render_template("home.html", countdown=duration, title="Home")
+
 
 @app.route("/upload-audio", methods=["POST"])
 def upload_audio():

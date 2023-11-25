@@ -39,7 +39,7 @@ def classify_undetermined():
     """Fetch and classify audio files from the database that haven't been classified."""
     unclassified = collection.find({"genre": {"$exists": False}})
     for audio in unclassified:
-        audio_data = audio['audio_data']
+        audio_data = audio["audio_data"]
         genre = knn_classifier.classify_genre(audio_data, model)
         collection.update_one({"_id": audio["_id"]}, {"$set": {"genre": genre}})
 
