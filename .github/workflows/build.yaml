@@ -66,6 +66,11 @@ jobs:
           docker build -f mongodb/Dockerfile -t capks/mongodb:${{ github.sha }} ./mongodb
           docker push capks/mongodb:${{ github.sha }}
 
+      - name: Add SSH key to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DIGITALOCEAN_DROPLET_IP }} ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEkNAf9n63w3dXq3fNc2GMkzUaWYToiIi4/okNE5atUo" >> ~/.ssh/known_hosts
+
       - name: Deploy to Digital Ocean
         uses: appleboy/ssh-action@master
         with:
