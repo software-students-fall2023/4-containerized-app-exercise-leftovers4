@@ -3,10 +3,8 @@
     """
 import subprocess
 import os
-import io
 from pymongo import MongoClient
 from bson import Binary
-from pydub import AudioSegment
 from flask import (
     Flask,
     render_template,
@@ -21,6 +19,7 @@ database = client[os.getenv("MONGODB_DATABASE")]
 collection = database[os.getenv("MONGODB_COLLECTION")]
 
 app = Flask(__name__)
+
 
 def convert_to_wav(input_data):
     """
@@ -48,7 +47,7 @@ def convert_to_wav(input_data):
         wav_data = wav_output.read()
 
     os.remove("temp_input_file")
-    os.remove(output_file)   
+    os.remove(output_file)
     return wav_data
 
 @app.route("/")
