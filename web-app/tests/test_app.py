@@ -9,7 +9,7 @@ import app
 def client():
     """a client fixture"""
     appl = app.create_app()  # Create an instance of your Flask app
-    appl.config["TESTING"] = True
+    # appl.config["TESTING"] = True
 
     with appl.test_client() as client:
         yield client

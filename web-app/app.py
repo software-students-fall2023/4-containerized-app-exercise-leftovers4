@@ -25,7 +25,7 @@ app = Flask(__name__)
 def create_app():
     """creates a mock app for testing"""
     appl = Flask(__name__)
-    appl.config["TESTING"] = True
+    # appl.config["TESTING"] = True
     # Additional configuration and initialization
     return appl
 
