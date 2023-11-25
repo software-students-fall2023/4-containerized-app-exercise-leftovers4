@@ -28,7 +28,6 @@ def convert_to_wav(input_data):
     Parameters:
     input_data (bytes): The input audio data.
     input_format (str): The format of the input audio data.
-    
 
     Returns:
     bytes: The converted audio data in WAV format.
@@ -79,8 +78,8 @@ def home():
 @app.route("/upload-audio", methods=["POST"])
 def upload_audio():
     """Uploads and adds audio file to database"""
-    if 'audioFile' in request.files:
-        audio_file = request.files['audioFile']
+    if "audioFile" in request.files:
+        audio_file = request.files["audioFile"]
         audio_data = audio_file.read()
         # Convert to WAV using FFmpeg
         wav_data = convert_to_wav(audio_data)
