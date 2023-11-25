@@ -24,10 +24,10 @@ app = Flask(__name__)
 
 def create_app():
     """creates a mock app for testing"""
-    app = Flask(__name__)
-    app.config["TESTING"] = True
+    appl = Flask(__name__)
+    appl.config["TESTING"] = True
     # Additional configuration and initialization
-    return app
+    return appl
 
 
 def convert_to_wav(input_data):
