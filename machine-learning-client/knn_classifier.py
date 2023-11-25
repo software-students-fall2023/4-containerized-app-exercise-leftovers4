@@ -38,26 +38,43 @@ def load_model(model_path):
         raise RuntimeError(f"Error loading model from file: {e}") from e
 
 
-def classify_genre(audio_path, model):
-    """
-    Classify the genre of an audio file using a pre-trained model.
+# def classify_genre(audio_path, model):
+#     """
+#     Classify the genre of an audio file using a pre-trained model.
 
-    This function extracts features from the given audio file and uses the
-    provided model to predict the genre of the audio.
+#     This function extracts features from the given audio file and uses the
+#     provided model to predict the genre of the audio.
+
+#     Parameters:
+#     audio_path (str): The file path of the audio recording to be classified.
+#     model (object): The trained machine learning model used for classification.
+
+#     Returns:
+#     str: The predicted genre of the audio file.
+#     """
+#     features = feature_extraction.extract_features(audio_path)
+
+#     features_reshaped = np.array(features).reshape(1, -1)
+
+#     genre_prediction = model.predict(features_reshaped)
+
+#     return genre_prediction[0]
+
+
+def classify_genre(audio_data, model):
+    """
+    Classify the genre of an audio data using a pre-trained model.
 
     Parameters:
-    audio_path (str): The file path of the audio recording to be classified.
+    audio_data (bytes): Binary audio data.
     model (object): The trained machine learning model used for classification.
 
     Returns:
-    str: The predicted genre of the audio file.
+    str: The predicted genre of the audio data.
     """
-    features = feature_extraction.extract_features(audio_path)
-
+    features = feature_extraction.extract_features(audio_data)
     features_reshaped = np.array(features).reshape(1, -1)
-
     genre_prediction = model.predict(features_reshaped)
-
     return genre_prediction[0]
 
 
@@ -70,5 +87,12 @@ if __name__ == "__main__":
     PATH_TO_AUDIO = input("Enter the audio recording path: ")
 
     # Classify the genre of the audio file
-    predicted_genre = classify_genre(PATH_TO_AUDIO, knn_model)
+    # predicted_genre = classify_genre(PATH_TO_AUDIO, knn_model)
+    # print("Predicted Genre:", predicted_genre)
+
+    with open(PATH_TO_AUDIO, "rb") as file_input:
+        audio_info = file_input.read()
+
+    predicted_genre = classify_genre(audio_info, knn_model)
+
     print("Predicted Genre:", predicted_genre)

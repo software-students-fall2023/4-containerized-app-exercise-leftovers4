@@ -11,9 +11,9 @@
 
   <body>
     <header class="headerContainer">
-      {% if title%}
+      {% if title %}
       <div class="title">
-        <h1>{{title}}</h1>
+        <h1>{{ title }}</h1>
       </div>
       {% endif %}
     </header>
@@ -26,49 +26,76 @@
         </div>
       </div>
       <div class="start-stop-container">
-        <form action="/start-recording" method="post">
-          <button
-            onclick=""
-            type="submit"
-            id="button9"
-            class="button-9"
-            role="button"
-          >
-            Start Recording
-          </button>
-        </form>
+        <button id="recordButton">Start Recording</button>
+        <audio id="audioPlayback" controls></audio>
       </div>
     </main>
 
     <footer></footer>
+
+    <script>
+      let mediaRecorder;
+      let audioChunks = [];
+      let recordingTimer;
+      let time = {{ countdown }};
+
+      // Access user's microphone
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                document.getElementById("audioPlayback").src = audioUrl;
+                clearInterval(recordingTimer);
+                uploadAudio(audioBlob);
+            };
+        });
+
+      document.getElementById("recordButton").addEventListener("click", () => {
+        if (mediaRecorder.state === "inactive") {
+            audioChunks = [];
+            mediaRecorder.start();
+            document.getElementById("recordButton").innerText = "Stop Recording";
+            startTimer(time);
+        } else {
+            mediaRecorder.stop();
+            document.getElementById("recordButton").innerText = "Start Recording";
+        }
+      });
+
+      function startTimer(duration) {
+        document.getElementById("time").innerHTML = duration;
+        recordingTimer = setInterval(function () {
+            duration--;
+            document.getElementById("time").innerHTML = duration;
+            if (duration <= 0) {
+                clearInterval(recordingTimer);
+                document.getElementById("time").innerHTML = "Done Recording";
+                mediaRecorder.stop();
+                document.getElementById("recordButton").innerText = "Start Recording";
+            }
+        }, 1000);
+      }
+
+      function uploadAudio(blob) {
+        let formData = new FormData();
+        formData.append("audioFile", blob, "recording.wav");
+
+        fetch('/upload-audio', {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+          if (response.ok) {
+            console.log("Audio uploaded successfully");
+          } else {
+            console.error("Server responded with an error status");
+          }
+        }).catch(error => console.error('Error:', error));
+      }
+    </script>
   </body>
-
-  <script>
-    function startTimer(duration) {
-        setInterval(function () {
-            document.getElementById("time").innerHTML = time
-            time = time - 1
-            console.log(time)
-            if (time < 0) {
-                clearInterval(count);
-                document.getElementById("time").innerHTML = "Done Recording";
-            }
-
-        }, 1000)
-    }
-
-    let time = {{ countdown }}
-    document.getElementById("button9").addEventListener("click", function () {
-        setInterval(function () {
-            console.log(time)
-            if (time < 0) {
-                clearInterval(count);
-                document.getElementById("time").innerHTML = "Done Recording";
-            }
-            document.getElementById("time").innerHTML = time
-            time = time - 1
-
-        }, 1000)
-    })
-  </script>
 </html>
