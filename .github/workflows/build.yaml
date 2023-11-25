@@ -74,27 +74,24 @@ jobs:
       - name: List files in the GitHub Actions workspace
         run: ls -alh $GITHUB_WORKSPACE
         
-      - name: Deploy to Digital Ocean
+      - name: Archive repository
+        run: |
+          tar -czf myapp.tar.gz -C $GITHUB_WORKSPACE .
+
+      - name: Transfer archive to server
+        run: |
+          scp -o StrictHostKeyChecking=no myapp.tar.gz root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www
+
+      - name: Extract and deploy on server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DIGITALOCEAN_DROPLET_IP }}
           username: root
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
-            mkdir -p /var/www/myapp
-            # Create a tarball of the necessary directories and docker-compose.yaml
-            cd $GITHUB_WORKSPACE
-            tar -czf myapp.tar.gz ./web-app ./machine-learning-client ./mongodb docker-compose.yaml
+            tar -xzf /var/www/myapp.tar.gz -C /var/www/myapp
+            cd /var/www/myapp
+            docker-compose pull
+            docker-compose down
+            docker-compose up -d
 
-            # Transfer the tarball to the server
-            scp -o StrictHostKeyChecking=no myapp.tar.gz root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www
-
-            # SSH commands to extract and start the application
-            ssh root@${{ secrets.DIGITALOCEAN_DROPLET_IP }} "
-              mkdir -p /var/www/myapp && 
-              tar -xzf /var/www/myapp.tar.gz -C /var/www/myapp && 
-              cd /var/www/myapp && 
-              docker-compose pull && 
-              docker-compose down && 
-              docker-compose up -d
-            "
