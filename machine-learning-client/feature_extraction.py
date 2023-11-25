@@ -90,7 +90,7 @@ def extract_features(audio_data, sample_rate=44100):
     # Load audio data from binary data
     audio, _ = librosa.load(io.BytesIO(audio_data), sr=sample_rate)
 
-    fixed_length = 7500
+    # fixed_length = 7500
 
     # Feature extraction
     mfccs = np.mean(librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40).T, axis=0)
