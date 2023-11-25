@@ -110,8 +110,6 @@ def extract_features(audio_data, sample_rate=44100):
     song_length = np.array([len(audio) / sample_rate])
 
     # Combine all features
-    features = np.hstack(
-        [mfccs, mel, spectral_contrast, tempo_feature, song_length]
-    )
+    features = np.hstack([mfccs, mel, spectral_contrast, tempo_feature, song_length])
 
     return features
