@@ -78,8 +78,10 @@ jobs:
           username: root
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
-            scp docker-compose.yml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp
+            mkdir -p /var/www/myapp
+            scp -o StrictHostKeyChecking=no docker-compose.yml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp
             cd /var/www/myapp
             docker-compose pull
             docker-compose down
             docker-compose up -d
+
