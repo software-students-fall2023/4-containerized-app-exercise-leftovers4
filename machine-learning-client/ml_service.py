@@ -26,10 +26,8 @@ import knn_classifier
 from pymongo import MongoClient
 
 # Load the model
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-valid_model_path = os.path.join(parent_dir, "knn_classifier.pkl")
-model = knn_classifier.load_model(valid_model_path)
+model_path = os.path.join("/app", "knn_classifier.pkl")
+model = knn_classifier.load_model(model_path)
 
 # Database connection
 client = MongoClient(os.getenv("MONGODB_URI"))
@@ -41,7 +39,8 @@ def classify_undetermined():
     """Fetch and classify audio files from the database that haven't been classified."""
     unclassified = collection.find({"genre": {"$exists": False}})
     for audio in unclassified:
-        genre = knn_classifier.classify_genre(audio["audio_data"], model)
+        audio_data = audio['audio_data']
+        genre = knn_classifier.classify_genre(audio_data, model)
         collection.update_one({"_id": audio["_id"]}, {"$set": {"genre": genre}})
 
 

@@ -4,6 +4,12 @@ FROM python:3.11-slim
 # Set the working directory in the container to /app
 WORKDIR /app
 
+RUN echo 'Acquire::http::Timeout "300";' > /etc/apt/apt.conf.d/99timeout
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install --fix-missing -y gcc portaudio19-dev ffmpeg
+
 # Copy the requirements file into the container at /app
 COPY requirements.txt /app/
 

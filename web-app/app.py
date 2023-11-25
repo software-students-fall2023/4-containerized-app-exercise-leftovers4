@@ -1,17 +1,18 @@
 """app.py
 
     """
+import subprocess
 import os
-import random
+import io
 from pymongo import MongoClient
 from bson import Binary
-from audio import record_audio
-
+from pydub import AudioSegment
 from flask import (
     Flask,
     render_template,
     redirect,
     url_for,
+    request,
 )
 
 # connecting to database
@@ -21,54 +22,60 @@ collection = database[os.getenv("MONGODB_COLLECTION")]
 
 app = Flask(__name__)
 
+def convert_to_wav(input_data):
+    """
+    Converts an audio file to WAV format using FFmpeg.
+
+    Parameters:
+    input_data (bytes): The input audio data.
+    input_format (str): The format of the input audio data.
+    
+    Returns:
+    bytes: The converted audio data in WAV format.
+    """
+    with open("temp_input_file", "wb") as temp_input:
+        temp_input.write(input_data)
+
+    output_file = "temp_output_file.wav"
+    command = ["ffmpeg", "-i", "temp_input_file", "-ar", "44100", "-ac", "2", output_file]
+    try:
+        subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+    except subprocess.CalledProcessError as e:
+        print("An error occurred while converting the file: ", e)
+        return None
+
+    with open(output_file, "rb") as wav_output:
+        wav_data = wav_output.read()
+
+    os.remove("temp_input_file")
+    os.remove(output_file)   
+    return wav_data
 
 @app.route("/")
 def index():
-    """Index route
-
-    Returns:
-        redirect: index route (redirects to /home)
-    """
+    """Index route"""
     return redirect(url_for("home"))
 
-
-# /home route: passes a 'countdown' var, and 'title' for header
 @app.route("/home")
 def home():
-    """Home route
-
-    Returns:
-        render_template: Home route
-    """
+    """Home route"""
     duration = 10
     return render_template("home.html", countdown=duration, title="Home")
 
+@app.route("/upload-audio", methods=["POST"])
+def upload_audio():
+    """Uploads and adds audio file to database"""
+    if 'audioFile' in request.files:
+        audio_file = request.files['audioFile']
+        audio_data = audio_file.read()
+        # Convert to WAV using FFmpeg
+        wav_data = convert_to_wav(audio_data)
 
-@app.route("/start-recording", methods=["POST"])
-def start_recording():
-    """Records and adds files to database
-
-    Returns:
-        render_template: Records and adds wav binary files to database
-    """
-    cwd = os.getcwd()
-    rand_num = random.randint(1, 100)
-    file_name = "output" + str(rand_num) + ".wav"
-    curr_dirr = cwd + "/audio_files/" + file_name
-    duration = 10
-    record_audio(curr_dirr, duration=duration + 1)
-
-    with open(curr_dirr, "rb") as file:
-        audio_data = Binary(file.read())
-
-    audio_document = {"name": file_name, "audio_data": audio_data}
-    collection.insert_one(audio_document)
-
-    ## grid fs (?)
-    # file_id = db.put(audio_data, filename="audiofile2.wav")
-    # audio_file = fs.get(file_id)
-    return render_template("home.html", title="Home")
-
+        # Store as binary
+        audio_document = {"name": audio_file.filename, "audio_data": Binary(wav_data)}
+        collection.insert_one(audio_document)
+        return "Audio uploaded successfully", 200
+    return "No audio file found", 400
 
 if __name__ == "__main__":
     app.run(debug=True)
