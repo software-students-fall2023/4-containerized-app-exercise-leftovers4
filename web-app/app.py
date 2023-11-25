@@ -23,6 +23,7 @@ app = Flask(__name__)
 
 
 def create_app():
+    """creates a mock app for testing"""
     app = Flask(__name__)
     app.config["TESTING"] = True
     # Additional configuration and initialization
