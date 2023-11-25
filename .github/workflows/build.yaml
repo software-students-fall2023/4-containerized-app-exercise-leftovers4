@@ -71,6 +71,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DIGITALOCEAN_DROPLET_IP }} ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEkNAf9n63w3dXq3fNc2GMkzUaWYToiIi4/okNE5atUo" >> ~/.ssh/known_hosts
 
+      - name: List files in the GitHub Actions workspace
+        run: ls -alh $GITHUB_WORKSPACE
+        
       - name: Deploy to Digital Ocean
         uses: appleboy/ssh-action@master
         with:
