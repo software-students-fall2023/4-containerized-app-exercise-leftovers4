@@ -82,9 +82,6 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
             mkdir -p /var/www/myapp
-            scp -o StrictHostKeyChecking=no $GITHUB_WORKSPACE/docker-compose.yaml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp
-            cd /var/www/myapp
-            docker-compose pull
-            docker-compose down
-            docker-compose up -d
-
+            cd $GITHUB_WORKSPACE
+            scp -o StrictHostKeyChecking=no docker-compose.yaml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp
+            ssh root@${{ secrets.DIGITALOCEAN_DROPLET_IP }} "cd /var/www/myapp && docker-compose pull && docker-compose down && docker-compose up -d"
