@@ -22,6 +22,13 @@ collection = database[os.getenv("MONGODB_COLLECTION")]
 app = Flask(__name__)
 
 
+def create_app():
+    app = Flask(__name__)
+    app.config["TESTING"] = True
+    # Additional configuration and initialization
+    return app
+
+
 def convert_to_wav(input_data):
     """
     Converts an audio file to WAV format using FFmpeg.
