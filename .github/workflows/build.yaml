@@ -74,17 +74,15 @@ jobs:
       - name: List files in the GitHub Actions workspace
         run: ls -alh $GITHUB_WORKSPACE
         
-      - name: Transfer Docker Compose file to server
-        run: |
-          scp -o StrictHostKeyChecking=no ./docker-compose.yaml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp/docker-compose.yaml
-
-      - name: Deploy on server
+      - name: Deploy to Digital Ocean
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DIGITALOCEAN_DROPLET_IP }}
           username: root
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
+            mkdir -p /var/www/myapp
+            scp -o StrictHostKeyChecking=no $GITHUB_WORKSPACE/docker-compose.yaml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp
             cd /var/www/myapp
             docker-compose pull
             docker-compose down
