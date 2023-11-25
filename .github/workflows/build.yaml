@@ -76,7 +76,7 @@ jobs:
         with:
           host: ${{ secrets.DIGITALOCEAN_DROPLET_IP }}
           username: root
-          password: ${{ secrets.DIGITALOCEAN_SSH_PASSWORD }}
+          key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
             mkdir -p /var/www/myapp
             scp -o StrictHostKeyChecking=no docker-compose.yml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp
