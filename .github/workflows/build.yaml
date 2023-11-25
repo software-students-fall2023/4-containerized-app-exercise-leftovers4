@@ -74,7 +74,7 @@ jobs:
       - name: List files in the GitHub Actions workspace
         run: ls -alh $GITHUB_WORKSPACE
         
-      - name: Transfer Docker Compose file to server
+      - name: Transfer Docker Compose file
         run: |
           scp -o StrictHostKeyChecking=no ./docker-compose.yaml root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www/myapp/docker-compose.yaml
 
