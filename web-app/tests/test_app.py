@@ -13,9 +13,9 @@ load_dotenv()
 @pytest.fixture
 def client():
     """a client fixture"""
-     os.environ['MONGODB_DATABASE'] = 'test_database'
+    os.environ["MONGODB_DATABASE"] = "test_database"
     appl = app.create_app()
-    appl.config["TESTING"] = True    
+    appl.config["TESTING"] = True
     with appl.test_client() as client:
         yield client
 
