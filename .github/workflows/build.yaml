@@ -82,9 +82,9 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
             mkdir -p /var/www/myapp
-            # Create a tarball of the entire repository
+            # Create a tarball of the necessary directories and docker-compose.yaml
             cd $GITHUB_WORKSPACE
-            tar -czf myapp.tar.gz .
+            tar -czf myapp.tar.gz ./web-app ./machine-learning-client ./mongodb docker-compose.yaml
 
             # Transfer the tarball to the server
             scp -o StrictHostKeyChecking=no myapp.tar.gz root@${{ secrets.DIGITALOCEAN_DROPLET_IP }}:/var/www
