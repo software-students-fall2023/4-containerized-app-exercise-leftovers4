@@ -90,14 +90,7 @@ def upload_audio():
         return "Audio uploaded successfully", 200
     return "No audio file found", 400
 
-@app.route("/results")
-def results():
-    """Results route
-    Returns:
-        render_template: Database results
-    """
-    audio_results = collection.find().sort("_id", -1).limit(20)
-    return render_template("results.html", title="Results", audio_results=audio_results)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
