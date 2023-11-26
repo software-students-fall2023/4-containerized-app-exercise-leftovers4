@@ -53,18 +53,18 @@ jobs:
 
       - name: Build and Push Web-App Docker Image
         run: |
-          docker build -f web-app/Dockerfile -t capks/web-app:${{ github.sha }} ./web-app
-          docker push capks/web-app:${{ github.sha }}
+          docker build -f web-app/Dockerfile -t capks/web-app:latest ./web-app
+          docker push capks/web-app:latest
 
       - name: Build and Push ML Client Docker Image
         run: |
-          docker build -f machine-learning-client/Dockerfile -t capks/machine-learning-client:${{ github.sha }} ./machine-learning-client
-          docker push capks/machine-learning-client:${{ github.sha }}
+          docker build -f machine-learning-client/Dockerfile -t capks/machine-learning-client:latest ./machine-learning-client
+          docker push capks/machine-learning-client:latest
 
       - name: Build and Push MongoDB Docker Image
         run: |
-          docker build -f mongodb/Dockerfile -t capks/mongodb:${{ github.sha }} ./mongodb
-          docker push capks/mongodb:${{ github.sha }}
+          docker build -f mongodb/Dockerfile -t capks/mongodb:latest ./mongodb
+          docker push capks/mongodb:latest
 
       - name: Add SSH key to known hosts
         run: |
