@@ -12,7 +12,6 @@ the model's prediction capabilities to determine the music genre of an audio fil
 """
 
 import pickle
-import os
 import numpy as np
 import feature_extraction
 
