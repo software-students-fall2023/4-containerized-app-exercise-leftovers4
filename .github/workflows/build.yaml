@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: CI, CD, ML Tests
 
 on:
   push:
@@ -7,20 +7,14 @@ on:
     branches: [ main, master ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     strategy:
       matrix:
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.11"]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Git LFS
-        run: |
-          sudo apt-get install git-lfs
-          git lfs install
-          git lfs pull
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -29,7 +23,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y portaudio19-dev
+          sudo apt-get install -y portaudio19-dev ffmpeg
           
       - name: Install dependencies
         run: |
@@ -39,10 +33,59 @@ jobs:
           pipenv sync --dev --python $(which python)
           pipenv shell --fancy --python $(which python)
           pipenv install python-dotenv
+          pipenv install pytest-cov
 
       - name: Run tests with pytest
         env:
           PYTHONPATH: ${{ github.workspace }}/machine-learning-client
         run: |
           cd machine-learning-client
-          pipenv run pytest tests/
+          pipenv run pytest --cov=./ tests/ --cov-report=xml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./machine-learning-client/coverage.xml
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+
+      - name: Login to Docker Hub
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Build and Push Web-App Docker Image
+        run: |
+          docker build -f web-app/Dockerfile -t capks/web-app:latest ./web-app
+          docker push capks/web-app:latest
+
+      - name: Build and Push ML Client Docker Image
+        run: |
+          docker build -f machine-learning-client/Dockerfile -t capks/machine-learning-client:latest ./machine-learning-client
+          docker push capks/machine-learning-client:latest
+
+      - name: Build and Push MongoDB Docker Image
+        run: |
+          docker build -f mongodb/Dockerfile -t capks/mongodb:latest ./mongodb
+          docker push capks/mongodb:latest
+
+      - name: Add SSH key to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DIGITALOCEAN_DROPLET_IP }} ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEkNAf9n63w3dXq3fNc2GMkzUaWYToiIi4/okNE5atUo" >> ~/.ssh/known_hosts
+
+      - name: List files in the GitHub Actions workspace
+        run: ls -alh $GITHUB_WORKSPACE
+        
+      - name: Deploy to Digital Ocean
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DIGITALOCEAN_DROPLET_IP }}
+          username: root
+          key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
+          script: |
+            cd /var/www/myapp
+            docker-compose pull
+            docker-compose down
+            docker-compose up -d
+
