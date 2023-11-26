@@ -10,8 +10,16 @@
     <h2>Audio Results</h2>
     <ul>
         {% for audio in audio_results %}
-            <li>{{ audio.name }}</li>
+        <li>
+          {% if audio.genre %}
+            The audio submitted at {{ audio.recorded_date }} is of type {{ audio.genre }}.
+          {% else %}
+            The audio submitted at {{ audio.recorded_date }} is not done processing yet, please check again later.
+          {% endif %}
+        </li>
         {% endfor %}
+
     </ul>
+    
 </body>
 </html>

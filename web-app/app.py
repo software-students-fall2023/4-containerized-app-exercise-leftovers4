@@ -12,6 +12,7 @@ from flask import (
     url_for,
     request,
 )
+from datetime import datetime
 
 # connecting to database
 client = MongoClient(os.getenv("MONGODB_URI"))
@@ -85,11 +86,20 @@ def upload_audio():
         wav_data = convert_to_wav(audio_data)
 
         # Store as binary
-        audio_document = {"name": audio_file.filename, "audio_data": Binary(wav_data)}
+        audio_document = {"name": audio_file.filename, "audio_data": Binary(wav_data), "recorded_date": datetime.utcnow().strftime("%B %d %H:%M:%S")}
         collection.insert_one(audio_document)
         return "Audio uploaded successfully", 200
     return "No audio file found", 400
 
+
+@app.route("/results")
+def results():
+    """Results route
+    Returns:
+        render_template: Database results
+    """
+    audio_results = collection.find().sort("_id", -1).limit(20)
+    return render_template("results.html", title="Results", audio_results=audio_results)
 
 
 if __name__ == "__main__":
