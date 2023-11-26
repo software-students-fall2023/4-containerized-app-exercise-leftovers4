@@ -8,7 +8,7 @@ Our containerized app helps to classify the genre of a short piece of music. The
 
 ## How To Run?
 
-Method 1: Cloning the Github
+### Method 1: Cloning the Github
 
 1. Using Git Bash, clone the directory using:
 
@@ -34,6 +34,12 @@ docker-compose up
 6. Open your default internet explorer (if the app did not do so automatically), and go to: http://localhost:5000/
 
 You should now see tha app running.
+
+### Method 2: Access the website
+
+To try the application directly, simply access the [website](http://159.89.226.1:5000/).
+
+Or type this into your browser: http://159.89.226.1:5000/
 
 ## Importing Starter Data?
 
