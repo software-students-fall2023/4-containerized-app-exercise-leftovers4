@@ -5,7 +5,21 @@
 
 ## Coverage Note
 
-ML test coverage does not include ml_service.py and train_model.py since the former is the backend service which requires the container database and the latter is only used on the local machine.
+ML test coverage does not include ml_service.py and train_model.py since the former is the backend service which requires the container database and the latter is only used on the local machine. The badge above uses Codecov. The report below uses the coverage tool in python for the ML client (as of 25th nov 2023 testing).
+
+```
+coverage report
+Name                                                     Stmts   Miss  Cover
+----------------------------------------------------------------------------
+machine-learning-client\feature_extraction.py               20      0   100%
+machine-learning-client\knn_classifier.py                   16      0   100%
+machine-learning-client\tests\test_array_operations.py      16      0   100%
+machine-learning-client\tests\test_classify_genre.py        31      0   100%
+machine-learning-client\tests\test_extract_features.py      25      0   100%
+machine-learning-client\tests\test_load_model.py            19      0   100%
+----------------------------------------------------------------------------
+TOTAL                                                      127      0   100%
+```
 
 ## What Does The App Do?
 
