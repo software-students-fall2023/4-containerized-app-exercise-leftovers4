@@ -15,12 +15,6 @@ jobs:
         python-version: ["3.11"]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Git LFS
-        run: |
-          sudo apt-get install git-lfs
-          git lfs install
-          git lfs pull
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -39,13 +33,22 @@ jobs:
           pipenv sync --dev --python $(which python)
           pipenv shell --fancy --python $(which python)
           pipenv install python-dotenv
+          pipenv install pytest-cov
 
       - name: Run tests with pytest
         env:
           PYTHONPATH: ${{ github.workspace }}/machine-learning-client
         run: |
           cd machine-learning-client
-          pipenv run pytest tests/
+          pipenv run pytest --cov=./ tests/ --cov-report=xml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./machine-learning-client/coverage.xml
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
 
       - name: Login to Docker Hub
         run: |
