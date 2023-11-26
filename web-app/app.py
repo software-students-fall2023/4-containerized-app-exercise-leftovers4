@@ -86,7 +86,11 @@ def upload_audio():
         wav_data = convert_to_wav(audio_data)
 
         # Store as binary
-        audio_document = {"name": audio_file.filename, "audio_data": Binary(wav_data), "recorded_date": datetime.utcnow().strftime("%B %d %H:%M:%S")}
+        audio_document = {
+            "name": audio_file.filename,
+            "audio_data": Binary(wav_data),
+            "recorded_date": datetime.utcnow().strftime("%B %d %H:%M:%S"),
+        }
         collection.insert_one(audio_document)
         return "Audio uploaded successfully", 200
     return "No audio file found", 400
