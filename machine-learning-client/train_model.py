@@ -51,7 +51,9 @@ def process_music_genre(folder_path, genre):
     for file in os.listdir(folder_path):
         if file.endswith(".wav"):
             file_path = os.path.join(folder_path, file)
-            features = feature_extraction.extract_features(file_path)
+            with open(file_path, "rb") as file_input:
+                audio_info = file_input.read()
+            features = feature_extraction.extract_features(audio_info)
             features_list.append(features)
             labels_list.append(genre)
     return features_list, labels_list
