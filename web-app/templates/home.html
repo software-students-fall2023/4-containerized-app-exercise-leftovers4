@@ -21,12 +21,13 @@
     <main>
       <div class="counter">
         <div>
-          <p>Press 'Start Recording' to begin recording</p>
+          <p>Press the microphone to begin recording</p>
           <p id="time"></p>
         </div>
       </div>
       <div class="start-stop-container">
-        <button id="recordButton">Start Recording</button>
+        <button id="recordButton">
+          <img src="{{ url_for('static', filename='images/microphone.png') }}" alt="Microphone Icon"></button>
         <audio id="audioPlayback" controls></audio>
       </div>
     </main>
