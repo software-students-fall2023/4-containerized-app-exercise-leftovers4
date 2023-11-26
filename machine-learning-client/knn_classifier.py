@@ -78,21 +78,21 @@ def classify_genre(audio_data, model):
     return genre_prediction[0]
 
 
-if __name__ == "__main__":
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    MODEL_PATH = os.path.join(script_dir, "knn_classifier.pkl")
-    knn_model = load_model(MODEL_PATH)
+# if __name__ == "__main__":
+#     script_dir = os.path.dirname(os.path.abspath(__file__))
+#     MODEL_PATH = os.path.join(script_dir, "knn_classifier.pkl")
+#     knn_model = load_model(MODEL_PATH)
 
-    # Path to new audio
-    PATH_TO_AUDIO = input("Enter the audio recording path: ")
+#     # Path to new audio
+#     PATH_TO_AUDIO = input("Enter the audio recording path: ")
 
-    # Classify the genre of the audio file
-    # predicted_genre = classify_genre(PATH_TO_AUDIO, knn_model)
-    # print("Predicted Genre:", predicted_genre)
+#     # Classify the genre of the audio file
+#     # predicted_genre = classify_genre(PATH_TO_AUDIO, knn_model)
+#     # print("Predicted Genre:", predicted_genre)
 
-    with open(PATH_TO_AUDIO, "rb") as file_input:
-        audio_info = file_input.read()
+#     with open(PATH_TO_AUDIO, "rb") as file_input:
+#         audio_info = file_input.read()
 
-    predicted_genre = classify_genre(audio_info, knn_model)
+#     predicted_genre = classify_genre(audio_info, knn_model)
 
-    print("Predicted Genre:", predicted_genre)
+#     print("Predicted Genre:", predicted_genre)

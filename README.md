@@ -3,6 +3,10 @@
 ![Build Status](https://github.com/software-students-fall2023/4-containerized-app-exercise-leftovers4/actions/workflows/build.yaml/badge.svg)
 [![codecov](https://codecov.io/gh/Capksz/4-containerized-app-exercise-leftovers4/graph/badge.svg?token=70GKW3FWOV)](https://codecov.io/gh/Capksz/4-containerized-app-exercise-leftovers4)
 
+## Coverage Note
+
+ML test coverage does not include ml_service.py and train_model.py since the former is the backend service which requires the container database and the latter is only used on the local machine.
+
 ## What Does The App Do?
 
 Our containerized app helps to classify the genre of a short piece of music. The user can record the piece using their microphone and this recording will be saved into our database as a binary file. Every 30 seconds, the Machine Learning client will run and classify new entries in the system with one of the following genres: Rock, Pop, Country, EDM, Classical, HipHopAndRap, R&BAndSoul, Reggae, Disco, Jazz. The machine learning client is pre-trained on approximately 1500 recordings, using feature extraction and the K-Nearest Neighbor algorithm to classify a new entry. However, a new entry will not retrain the model, it merely classifies it. You can view the results of the classifications on the results page.

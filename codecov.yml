@@ -1,0 +1,4 @@
+codecov:
+  ignore:
+    - "/machine-learning-client/ml_service.py"
+    - "/machine-learning-client/train_model.py"
