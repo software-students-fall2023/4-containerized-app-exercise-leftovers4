@@ -3,6 +3,7 @@
     """
 import subprocess
 import os
+from datetime import datetime
 from pymongo import MongoClient
 from bson import Binary
 from flask import (
@@ -12,7 +13,6 @@ from flask import (
     url_for,
     request,
 )
-from datetime import datetime
 
 # connecting to database
 client = MongoClient(os.getenv("MONGODB_URI"))
