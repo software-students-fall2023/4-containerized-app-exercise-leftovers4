@@ -1,7 +1,7 @@
 # Music Classification Containerized App
 
 ![Build Status](https://github.com/software-students-fall2023/4-containerized-app-exercise-leftovers4/actions/workflows/build.yaml/badge.svg)
-![Build Status](https://github.com/software-students-fall2023/4-containerized-app-exercise-leftovers4/actions/workflows/front-end-tests.yaml/badge.svg)
+![Build Status](https://github.com/software-students-fall2023/4-containerized-app-exercise-leftovers4/actions/workflows/back-end-tests.yaml/badge.svg)
 
 ## Coverage Note
 
