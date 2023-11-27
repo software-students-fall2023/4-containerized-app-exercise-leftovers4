@@ -73,17 +73,32 @@ def test_upload_audio_no_file(client):
 
 def test_upload_audio_with_file(client):
     """Tests the upload_audio route with a file uploaded."""
-    # mock pymongo collection methods used in the upload_audio function
-    with patch("web_app.app.collection.find") as mock_find, patch(
-        "web_app.app.collection.insert_one"
-    ) as mock_insert_one:
-        mock_find.return_value.sort.return_value.limit.return_value = [MagicMock()]
 
-        mock_insert_one.return_value = None
+    mock_file = mock_open(read_data=b"some wav data")
+
+    original_open = open
+
+    with patch("subprocess.run", MagicMock(returncode=0)) as mock_run, patch(
+        "os.remove", MagicMock()
+    ) as mock_remove, patch(
+        "builtins.open", mock_open(read_data=b"some wav data")
+    ) as mock_open_obj:
+
+        def open_side_effect(file, mode="r", *args, **kwargs):
+            if file in ["temp_input_file", "temp_output_file.wav"] and mode in [
+                "rb",
+                "wb",
+            ]:
+                return mock_file()
+            else:
+                return original_open(file, mode, *args, **kwargs)
+
+        mock_open_obj.side_effect = open_side_effect
 
         data = {
             "audioFile": (io.BytesIO(b"some initial audio data"), "test.mp3"),
         }
+
         response = client.post(
             "/upload-audio", data=data, content_type="multipart/form-data"
         )
