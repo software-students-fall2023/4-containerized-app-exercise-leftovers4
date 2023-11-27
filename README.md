@@ -2,10 +2,11 @@
 
 ![Build Status](https://github.com/software-students-fall2023/4-containerized-app-exercise-leftovers4/actions/workflows/build.yaml/badge.svg)
 [![codecov](https://codecov.io/gh/Capksz/4-containerized-app-exercise-leftovers4/graph/badge.svg?token=70GKW3FWOV)](https://codecov.io/gh/Capksz/4-containerized-app-exercise-leftovers4)
+![Build Status](https://github.com/software-students-fall2023/4-containerized-app-exercise-leftovers4/actions/workflows/front-end-tests.yaml/badge.svg)
 
 ## Coverage Note
 
-ML test coverage does not include ml_service.py and train_model.py since the former is the backend service which requires the container database and the latter is only used on the local machine. The badge above uses Codecov. The report below uses the coverage tool in python for the ML client (as of 25th nov 2023 testing).
+ML test coverage does not include ml_service.py and train_model.py since the former is the backend service which requires the container database and the latter is only used on the local machine. The badge above uses Codecov. The report below uses the coverage tool in python for the ML client (as of 25th Nov 2023 testing).
 
 ```
 coverage report
@@ -19,6 +20,19 @@ machine-learning-client\tests\test_extract_features.py      25      0   100%
 machine-learning-client\tests\test_load_model.py            19      0   100%
 ----------------------------------------------------------------------------
 TOTAL                                                      127      0   100%
+```
+
+For the web-app, this is the coverage report (as of 27th Nov 2023 testing).
+
+```
+Name                  Stmts   Miss  Cover
+-----------------------------------------
+tests/__init__.py         0      0   100%
+tests/test_app.py        60      0   100%
+web_app/__init__.py       0      0   100%
+web_app/app.py           56     11    80%
+-----------------------------------------
+TOTAL                   116     11    91%
 ```
 
 ## What Does The App Do?
