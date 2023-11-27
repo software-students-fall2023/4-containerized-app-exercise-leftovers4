@@ -15,8 +15,6 @@ from flask import (
     request,
 )
 
-from unittest.mock import patch, mock_open, MagicMock
-
 load_dotenv()
 
 # connecting to database

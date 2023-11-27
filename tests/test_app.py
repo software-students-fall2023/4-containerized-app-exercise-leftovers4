@@ -1,20 +1,17 @@
 """Testing front end """
-from unittest.mock import patch, mock_open, MagicMock
-from bson import Binary
-import io
+from unittest.mock import patch
 import os
 import sys
 import pytest
+from web_app.app import app
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(script_dir)
 sys.path.append(project_root)  # adding project root directory to sys.path
 
-from web_app.app import app
-
 
 @pytest.fixture
-def client():
+def test_client():
     """configuring Flask application to run in testing"""
     app.config["TESTING"] = True
     with app.test_client() as client:
@@ -39,6 +36,22 @@ def test_upload_audio_no_file(client):
     response = client.post("/upload-audio")
     assert response.status_code == 400
     assert b"No audio file found" in response.data
+
+
+def test_results_route(client):
+    """
+    Tests the results route.
+    """
+    # mock database call
+    with patch("web_app.app.collection.find") as mock_find:
+        mock_find.return_value.sort.return_value.limit.return_value = [
+            {"_id": 1, "name": "Test Audio 1"},
+        ]
+        # get /results
+        response = client.get("/results")
+
+        # OK response
+        assert response.status_code == 200
 
 
 # def test_upload_audio_with_file(client):
@@ -87,19 +100,3 @@ def test_upload_audio_no_file(client):
 
 #         # mock_collection.insert_one.assert_called_once()
 #         # mock_collection.insert_one.assert_called()
-
-
-def test_results_route(client):
-    """
-    Tests the results route.
-    """
-    # mock database call
-    with patch("web_app.app.collection.find") as mock_find:
-        mock_find.return_value.sort.return_value.limit.return_value = [
-            {"_id": 1, "name": "Test Audio 1"},
-        ]
-        # get /results
-        response = client.get("/results")
-
-        # OK response
-        assert response.status_code == 200
