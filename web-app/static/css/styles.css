@@ -9,9 +9,8 @@
 .headerContainer {
     display: flex;
     height: 5em;
-    background-color: darkblue; /* You might want to define --color5 in your CSS variables */
-    padding: 1%;
-    color: white; /* You might want to define --color1 in your CSS variables */
+    background-color: #830c0c; /* You might want to define --color5 in your CSS variables */
+    color: #e7e3e3; /* You might want to define --color1 in your CSS variables */
 }
 
 .title {
@@ -21,11 +20,14 @@
     flex-grow: 1;
 }
 
+body{
+    background-color:#e6af71;
+}
+
 /* Record Button Styles */
 #recordButton {
     appearance: button;
     aspect-ratio:1;
-    
     backface-visibility: hidden;
     background-color: #c01a1a;
     border-radius: 50%;
@@ -64,7 +66,7 @@
 /* Main Container Styles */
 .start-stop-container {
     width: 70%;
-    margin: 0 auto;
+    margin: auto auto;
     display: flex;
     justify-content: center;
 }
@@ -72,16 +74,38 @@
 /* Counter Styles */
 .counter {
     width: 100%;
-    height: 40vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    margin: 20px auto;
+    position: relative;
 }
 
 .counter p {
-    text-align: center;
     font-size: 25px;
+    text-align: center;
 }
+
+.counter img{
+    margin:auto;
+    width:40%;
+    opacity:0.5;
+    transform: translateX(50%);
+    border: 4px solid black;
+    border-radius: 50%;
+    background-color:lightgrey;
+    padding: 5px;
+}
+
+/*Cosmetic Styles*/
+.web-cosmetics {
+    top: -65px;
+    right: 0;
+    width:50%;
+    z-index: 2;
+    position:absolute;
+    overflow:hidden;
+}
+
 
 /* Additional Styles as Needed */
 
