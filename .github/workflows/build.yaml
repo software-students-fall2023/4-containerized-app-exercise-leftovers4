@@ -89,11 +89,3 @@ jobs:
             docker-compose down
             docker-compose up -d
 
-=======
-          pipenv run pytest tests/
-      - name: Run front-end tests with pytest
-        env: 
-          PYTHONPATH: ${{ github.workspace }}/web-app
-        run: |
-          pipenv run pytest tests/
->>>>>>> 5bd8cfd (pytest for front-end)
