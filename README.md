@@ -1,12 +1,11 @@
 # Music Classification Containerized App
 
 ![Build Status](https://github.com/software-students-fall2023/4-containerized-app-exercise-leftovers4/actions/workflows/build.yaml/badge.svg)
-[![codecov](https://codecov.io/gh/Capksz/4-containerized-app-exercise-leftovers4/graph/badge.svg?token=70GKW3FWOV)](https://codecov.io/gh/Capksz/4-containerized-app-exercise-leftovers4)
 ![Build Status](https://github.com/software-students-fall2023/4-containerized-app-exercise-leftovers4/actions/workflows/front-end-tests.yaml/badge.svg)
 
 ## Coverage Note
 
-ML test coverage does not include ml_service.py and train_model.py since the former is the backend service which requires the container database and the latter is only used on the local machine. The badge above uses Codecov. The report below uses the coverage tool in python for the ML client (as of 25th Nov 2023 testing).
+ML test coverage does not include ml_service.py and train_model.py since the former is the backend service which requires the container database and the latter is only used on the local machine. To view the most recent coverage results, check the actions tab of Github for our "Front End Tests" and "CI, CD, ML Tests" workflow results where the coverage results are printed to the console. The report below uses the coverage tool in python for the ML client (as of 25th Nov 2023 testing).
 
 ```
 coverage report
