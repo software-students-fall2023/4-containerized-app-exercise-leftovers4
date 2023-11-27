@@ -17,6 +17,7 @@ pymongo = "*"
 typing-extensions = "*"
 pytest = "*"
 python-dotenv = "*"
+coverage = "*"
 
 [dev-packages]
 
