@@ -41,52 +41,52 @@ def test_upload_audio_no_file(client):
     assert b"No audio file found" in response.data
 
 
-# def test_upload_audio_with_file(client):
-#     """Tests the upload_audio route with a file uploaded."""
+def test_upload_audio_with_file(client):
+    """Tests the upload_audio route with a file uploaded."""
 
-#     mock_file = mock_open(read_data=b"some wav data")
+    mock_file = mock_open(read_data=b"some wav data")
 
-#     # mock pymongo collection methods and MongoClient
-#     mock_collection = MagicMock()
-#     mock_client = MagicMock()
-#     mock_client.return_value.get_database.return_value.get_collection.return_value = (
-#         mock_collection
-#     )
+    # mock pymongo collection methods and MongoClient
+    mock_collection = MagicMock()
+    mock_client = MagicMock()
+    mock_client.return_value.get_database.return_value.get_collection.return_value = (
+        mock_collection
+    )
 
-#     original_open = open
+    original_open = open
 
-#     # Patching MongoDB client, subprocess, and os.remove
-#     with patch("pymongo.MongoClient", mock_client), patch(
-#         "subprocess.run", MagicMock(returncode=0)
-#     ), patch("os.remove", MagicMock()), patch(
-#         "builtins.open", mock_open(read_data=b"some wav data")
-#     ) as mock_open_obj:
+    # Patching MongoDB client, subprocess, and os.remove
+    with patch("pymongo.MongoClient", mock_client), patch(
+        "subprocess.run", MagicMock(returncode=0)
+    ), patch("os.remove", MagicMock()), patch(
+        "builtins.open", mock_open(read_data=b"some wav data")
+    ) as mock_open_obj:
 
-#         def open_side_effect(file, mode="r", *args, **kwargs):
-#             if file in ["temp_input_file", "temp_output_file.wav"] and mode in [
-#                 "rb",
-#                 "wb",
-#             ]:
-#                 return mock_file()
-#             else:
-#                 return original_open(file, mode, *args, **kwargs)
+        def open_side_effect(file, mode="r", *args, **kwargs):
+            if file in ["temp_input_file", "temp_output_file.wav"] and mode in [
+                "rb",
+                "wb",
+            ]:
+                return mock_file()
+            else:
+                return original_open(file, mode, *args, **kwargs)
 
-#         mock_open_obj.side_effect = open_side_effect
+        mock_open_obj.side_effect = open_side_effect
 
-#         data = {
-#             "audioFile": (io.BytesIO(b"some initial audio data"), "test.wav"),
-#         }
+        data = {
+            "audioFile": (io.BytesIO(b"some initial audio data"), "test.wav"),
+        }
 
-#         print("in data", data)
+        print("in data", data)
 
-#         response = client.post(
-#             "/upload-audio", data=data, content_type="multipart/form-data"
-#         )
+        response = client.post(
+            "/upload-audio", data=data, content_type="multipart/form-data"
+        )
 
-#         assert response.status_code == 200
+        assert response.status_code == 200
 
-#         # mock_collection.insert_one.assert_called_once()
-#         # mock_collection.insert_one.assert_called()
+        # mock_collection.insert_one.assert_called_once()
+        # mock_collection.insert_one.assert_called()
 
 
 def test_results_route(client):
