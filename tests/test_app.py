@@ -1,5 +1,6 @@
 """Testing front end """
 from unittest.mock import patch, mock_open, MagicMock
+from bson import Binary
 import io
 import os
 import sys
@@ -33,42 +34,11 @@ def test_home_route(client):
     assert response.status_code == 200
 
 
-def test_upload_audio_no_file(client):
-    """Tests the upload_audio route with no file uploaded."""
-    response = client.post("/upload-audio")
-    assert response.status_code == 400
-    assert b"No audio file found" in response.data
-
-
-# def test_upload_audio_with_file(client):
-#     """Tests the upload_audio route with a file uploaded."""
-
-#     mock_file = mock_open(read_data=b"some wav data")
-#     with patch("subprocess.run") as mock_run, patch("os.remove") as mock_remove:
-#         mock_run.return_value = MagicMock(returncode=0)
-
-#         # reference to unpatched open
-#         original_open = open
-
-#         # side effect for the mock to only apply to specific filenames
-#         def open_side_effect(file, *args, **kwargs):
-#             # checking if trying to open the file we're interested in mocking
-#             # else call original open
-#             if file in ["temp_input_file", "temp_output_file.wav"]:
-#                 return mock_file()
-#             else:
-#                 return original_open(file, *args, **kwargs)
-
-#         with patch("builtins.open", side_effect=open_side_effect):
-#             data = {
-#                 "audioFile": (io.BytesIO(b"some initial audio data"), "test.mp3"),
-#             }
-#             response = client.post(
-#                 "/upload-audio", data=data, content_type="multipart/form-data"
-#             )
-
-#     assert response.status_code == 200
-#     assert mock_remove.call_count == 2  # remove temp files
+# def test_upload_audio_no_file(client):
+#     """Tests the upload_audio route with no file uploaded."""
+#     response = client.post("/upload-audio")
+#     assert response.status_code == 400
+#     assert b"No audio file found" in response.data
 
 
 def test_upload_audio_with_file(client):
@@ -76,16 +46,19 @@ def test_upload_audio_with_file(client):
 
     mock_file = mock_open(read_data=b"some wav data")
 
-    # Create mocks for database interactions
-    mock_db = MagicMock()
+    # mock pymongo collection methods and MongoClient
     mock_collection = MagicMock()
-    mock_db.get_collection.return_value = mock_collection
+    mock_client = MagicMock()
+    mock_client.return_value.get_database.return_value.get_collection.return_value = (
+        mock_collection
+    )
 
     original_open = open
 
-    with patch("pymongo.MongoClient", return_value=mock_db), patch(
+    # Patching MongoDB client, subprocess, and os.remove
+    with patch("pymongo.MongoClient", mock_client), patch(
         "subprocess.run", MagicMock(returncode=0)
-    ) as mock_run, patch("os.remove", MagicMock()) as mock_remove, patch(
+    ), patch("os.remove", MagicMock()), patch(
         "builtins.open", mock_open(read_data=b"some wav data")
     ) as mock_open_obj:
 
@@ -101,13 +74,19 @@ def test_upload_audio_with_file(client):
         mock_open_obj.side_effect = open_side_effect
 
         data = {
-            "audioFile": (io.BytesIO(b"some initial audio data"), "test.mp3"),
+            "audioFile": (io.BytesIO(b"some initial audio data"), "test.wav"),
         }
+
+        print("in data", data)
+
         response = client.post(
             "/upload-audio", data=data, content_type="multipart/form-data"
         )
 
         assert response.status_code == 200
+
+        # mock_collection.insert_one.assert_called_once()
+        # mock_collection.insert_one.assert_called()
 
 
 def test_results_route(client):

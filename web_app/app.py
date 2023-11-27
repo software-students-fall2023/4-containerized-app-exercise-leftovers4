@@ -15,6 +15,8 @@ from flask import (
     request,
 )
 
+from unittest.mock import patch, mock_open, MagicMock
+
 load_dotenv()
 
 # connecting to database
@@ -28,7 +30,7 @@ app = Flask(__name__)
 def create_app():
     """creates a mock app for testing"""
     appl = Flask(__name__)
-    # appl.config["TESTING"] = True
+    appl.config["TESTING"] = True
     # Additional configuration and initialization
     return appl
 
@@ -90,6 +92,7 @@ def home():
 @app.route("/upload-audio", methods=["POST"])
 def upload_audio():
     """Uploads and adds audio file to database"""
+    print("in upload-audio", request.files)
     if "audioFile" in request.files:
         audio_file = request.files["audioFile"]
         audio_data = audio_file.read()
@@ -103,8 +106,34 @@ def upload_audio():
             "recorded_date": datetime.utcnow().strftime("%B %d %H:%M:%S"),
         }
         collection.insert_one(audio_document)
+        print("doc inserted")
         return "Audio uploaded successfully", 200
     return "No audio file found", 400
+
+
+# @app.route("/upload-audio", methods=["POST"])
+# def upload_audio():
+#     print("in upload-audio", request.files)
+#     print("Route hit")
+#     audio_document = {
+#         "name": "test.wav",
+#         "audio_data": Binary(b"some dummy data"),
+#         "recorded_date": datetime.utcnow().strftime("%B %d %H:%M:%S"),
+#     }
+#     collection.insert_one(audio_document)
+#     print("Document inserted")
+#     return "Audio uploaded successfully", 200
+
+
+# @app.route("/upload-audio", methods=["POST"])
+# def upload_audio():
+#     # Your existing route logic
+#     mock_collection = MagicMock()
+#     mock_collection.insert_one(
+#         "../audio_files/4-containerized-app-exercise-leftovers4output.wav"
+#     )  # Temporarily replace with mock
+#     print("Doc inserted")
+#     return "Audio uploaded successfully", 200
 
 
 @app.route("/results")
