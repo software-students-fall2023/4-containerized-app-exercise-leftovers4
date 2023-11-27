@@ -27,7 +27,6 @@ body{
 /* Record Button Styles */
 #recordButton {
     appearance: button;
-    aspect-ratio:1;
     backface-visibility: hidden;
     background-color: #c01a1a;
     border-radius: 50%;
@@ -73,11 +72,8 @@ body{
 
 /* Counter Styles */
 .counter {
-    width: 100%;
-    display: flex;
-    justify-content: center;
     margin: 20px auto;
-    position: relative;
+    justify-items:center;
 }
 
 .counter p {
@@ -86,10 +82,9 @@ body{
 }
 
 .counter img{
-    margin:auto;
-    width:40%;
+    width:20%;
     opacity:0.5;
-    transform: translateX(50%);
+    transform: translateX(200%);
     border: 4px solid black;
     border-radius: 50%;
     background-color:lightgrey;
@@ -98,11 +93,9 @@ body{
 
 /*Cosmetic Styles*/
 .web-cosmetics {
-    top: -65px;
-    right: 0;
-    width:50%;
+    margin:-100px auto;
+    width:100%;
     z-index: 2;
-    position:absolute;
     overflow:hidden;
 }
 
