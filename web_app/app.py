@@ -109,31 +109,6 @@ def upload_audio():
     return "No audio file found", 400
 
 
-# @app.route("/upload-audio", methods=["POST"])
-# def upload_audio():
-#     print("in upload-audio", request.files)
-#     print("Route hit")
-#     audio_document = {
-#         "name": "test.wav",
-#         "audio_data": Binary(b"some dummy data"),
-#         "recorded_date": datetime.utcnow().strftime("%B %d %H:%M:%S"),
-#     }
-#     collection.insert_one(audio_document)
-#     print("Document inserted")
-#     return "Audio uploaded successfully", 200
-
-
-# @app.route("/upload-audio", methods=["POST"])
-# def upload_audio():
-#     # Your existing route logic
-#     mock_collection = MagicMock()
-#     mock_collection.insert_one(
-#         "../audio_files/4-containerized-app-exercise-leftovers4output.wav"
-#     )  # Temporarily replace with mock
-#     print("Doc inserted")
-#     return "Audio uploaded successfully", 200
-
-
 @app.route("/results")
 def results():
     """Results route
