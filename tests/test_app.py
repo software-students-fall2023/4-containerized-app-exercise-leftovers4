@@ -1,4 +1,5 @@
 """Testing front end """
+# pylint: disable=redefined-outer-name
 from unittest.mock import patch
 import os
 import sys
@@ -18,27 +19,27 @@ def test_client():
         yield client
 
 
-def test_index_route(client):
+def test_index_route(test_client):
     """Tests the index route."""
-    response = client.get("/")
+    response = test_client.get("/")
     assert response.status_code == 302  # assume redirect
     assert response.location.endswith("/home")  # redirect to home
 
 
-def test_home_route(client):
+def test_home_route(test_client):
     """Tests the home route."""
-    response = client.get("/home")
+    response = test_client.get("/home")
     assert response.status_code == 200
 
 
-def test_upload_audio_no_file(client):
+def test_upload_audio_no_file(test_client):
     """Tests the upload_audio route with no file uploaded."""
-    response = client.post("/upload-audio")
+    response = test_client.post("/upload-audio")
     assert response.status_code == 400
     assert b"No audio file found" in response.data
 
 
-def test_results_route(client):
+def test_results_route(test_client):
     """
     Tests the results route.
     """
@@ -48,7 +49,7 @@ def test_results_route(client):
             {"_id": 1, "name": "Test Audio 1"},
         ]
         # get /results
-        response = client.get("/results")
+        response = test_client.get("/results")
 
         # OK response
         assert response.status_code == 200
