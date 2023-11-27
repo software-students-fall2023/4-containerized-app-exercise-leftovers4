@@ -1,4 +1,4 @@
-name: CI, CD, ML Tests
+name: CI, CD, Front End Tests
 
 on:
   push:
@@ -37,20 +37,11 @@ jobs:
 
       - name: Run tests with pytest
         env:
-          PYTHONPATH: ${{ github.workspace }}/machine-learning-client
+          PYTHONPATH: ${{ github.workspace }}/tests
         run: |
-          cd machine-learning-client
-          pipenv run pytest --cov=./ tests/ --cov-report=xml
-          pipenv run python -m coverage run -m pytest
+          pipenv run pytest tests/
+          pipenv run python -m coverage run -m pytest tests/
           pipenv run python -m coverage report
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./machine-learning-client/coverage.xml
-          fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
-
 
       - name: Login to Docker Hub
         run: |
