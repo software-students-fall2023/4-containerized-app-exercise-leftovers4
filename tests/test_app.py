@@ -76,11 +76,16 @@ def test_upload_audio_with_file(client):
 
     mock_file = mock_open(read_data=b"some wav data")
 
+    # Create mocks for database interactions
+    mock_db = MagicMock()
+    mock_collection = MagicMock()
+    mock_db.get_collection.return_value = mock_collection
+
     original_open = open
 
-    with patch("subprocess.run", MagicMock(returncode=0)) as mock_run, patch(
-        "os.remove", MagicMock()
-    ) as mock_remove, patch(
+    with patch("pymongo.MongoClient", return_value=mock_db), patch(
+        "subprocess.run", MagicMock(returncode=0)
+    ) as mock_run, patch("os.remove", MagicMock()) as mock_remove, patch(
         "builtins.open", mock_open(read_data=b"some wav data")
     ) as mock_open_obj:
 
@@ -98,7 +103,6 @@ def test_upload_audio_with_file(client):
         data = {
             "audioFile": (io.BytesIO(b"some initial audio data"), "test.mp3"),
         }
-
         response = client.post(
             "/upload-audio", data=data, content_type="multipart/form-data"
         )
