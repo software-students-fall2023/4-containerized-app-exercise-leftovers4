@@ -39,5 +39,5 @@ jobs:
         env: 
           PYTHONPATH: ${{ github.workspace }}/web-app
         run: |
-          cd web-app
+          cd web_app
           pipenv run pytest tests/
