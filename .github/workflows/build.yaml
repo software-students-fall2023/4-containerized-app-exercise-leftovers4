@@ -41,6 +41,8 @@ jobs:
         run: |
           cd machine-learning-client
           pipenv run pytest --cov=./ tests/ --cov-report=xml
+          pipenv run python -m coverage run -m pytest
+          pipenv run python -m coverage report
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
