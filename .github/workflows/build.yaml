@@ -56,8 +56,8 @@ jobs:
 
       - name: Build and Push Web-App Docker Image
         run: |
-          docker build -f web-app/Dockerfile -t capks/web-app:latest ./web-app
-          docker push capks/web-app:latest
+          docker build -f web_app/Dockerfile -t capks/web_app:latest ./web_app
+          docker push capks/web_app:latest
 
       - name: Build and Push ML Client Docker Image
         run: |
