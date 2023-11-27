@@ -4,6 +4,7 @@
 import subprocess
 import os
 from datetime import datetime
+from dotenv import load_dotenv
 from pymongo import MongoClient
 from bson import Binary
 from flask import (
@@ -13,6 +14,8 @@ from flask import (
     url_for,
     request,
 )
+
+load_dotenv()
 
 # connecting to database
 client = MongoClient(os.getenv("MONGODB_URI"))
