@@ -21,12 +21,15 @@
     <main>
       <div class="counter">
         <div>
-          <p>Press 'Start Recording' to begin recording</p>
+          <p>
+            Press the microphone to begin recording</p>
           <p id="time"></p>
+          <p2><img src="{{ url_for('static', filename='images/background.png') }}" alt = "Background icon"></p2>
         </div>
       </div>
       <div class="start-stop-container">
-        <button id="recordButton">Start Recording</button>
+        <button id="recordButton">
+          <img src="{{ url_for('static', filename='images/microphone.png') }}" alt="Microphone Icon"></button>
         <audio id="audioPlayback" controls></audio>
       </div>
       <div class="resultsButton">
@@ -62,13 +65,11 @@
         if (mediaRecorder.state === "inactive") {
             audioChunks = [];
             mediaRecorder.start();
-            document.getElementById("recordButton").innerText = "Stop Recording";
             startTimer(time);
         } else {
             mediaRecorder.stop();
-            document.getElementById("recordButton").innerText = "Start Recording";
         }
-      });
+      }); 
 
       function startTimer(duration) {
         document.getElementById("time").innerHTML = duration;
@@ -79,7 +80,6 @@
                 clearInterval(recordingTimer);
                 document.getElementById("time").innerHTML = "Done Recording";
                 mediaRecorder.stop();
-                document.getElementById("recordButton").innerText = "Start Recording";
             }
         }, 1000);
       }
