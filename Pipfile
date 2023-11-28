@@ -16,6 +16,9 @@ wave = "*"
 pymongo = "*"
 typing-extensions = "*"
 pytest = "*"
+python-dotenv = "*"
+coverage = "*"
+pytest-cov = "*"
 
 [dev-packages]
 

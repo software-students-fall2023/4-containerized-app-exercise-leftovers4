@@ -4,6 +4,7 @@
 import subprocess
 import os
 from datetime import datetime
+from dotenv import load_dotenv
 from pymongo import MongoClient
 from bson import Binary
 from flask import (
@@ -14,12 +15,22 @@ from flask import (
     request,
 )
 
+load_dotenv()
+
 # connecting to database
 client = MongoClient(os.getenv("MONGODB_URI"))
 database = client[os.getenv("MONGODB_DATABASE")]
 collection = database[os.getenv("MONGODB_COLLECTION")]
 
 app = Flask(__name__)
+
+
+def create_app():
+    """creates a mock app for testing"""
+    appl = Flask(__name__)
+    appl.config["TESTING"] = True
+    # Additional configuration and initialization
+    return appl
 
 
 def convert_to_wav(input_data):
@@ -79,6 +90,7 @@ def home():
 @app.route("/upload-audio", methods=["POST"])
 def upload_audio():
     """Uploads and adds audio file to database"""
+    print("in upload-audio", request.files)
     if "audioFile" in request.files:
         audio_file = request.files["audioFile"]
         audio_data = audio_file.read()
@@ -92,6 +104,7 @@ def upload_audio():
             "recorded_date": datetime.utcnow().strftime("%B %d %H:%M:%S"),
         }
         collection.insert_one(audio_document)
+        print("doc inserted")
         return "Audio uploaded successfully", 200
     return "No audio file found", 400
 
