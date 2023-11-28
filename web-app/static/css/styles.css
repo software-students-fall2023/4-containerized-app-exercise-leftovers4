@@ -105,7 +105,7 @@ table {
 th, td {
     padding: 10px;
     text-align: left;
-    border: 1px solid darkgrey;
+    border: 1px solid rgb(17, 17, 17);
 }
 
 th {
