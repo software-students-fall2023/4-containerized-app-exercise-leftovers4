@@ -46,8 +46,8 @@ body{
 }
 
 #recordButton img{
-		width:20px;
-        filter: invert(89%) sepia(100%) saturate(0%) hue-rotate(149deg) brightness(108%) contrast(101%);
+    width:20px;
+    filter: invert(89%) sepia(100%) saturate(0%) hue-rotate(149deg) brightness(108%) contrast(101%);
 }
 
 #recordButton:disabled {
@@ -91,14 +91,26 @@ body{
     padding: 5px;
 }
 
-/*Cosmetic Styles*/
-.web-cosmetics {
-    margin:-100px auto;
-    width:100%;
-    z-index: 2;
-    overflow:hidden;
+h1 {
+
 }
 
+/* Table Styles */
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid darkgrey;
+}
+
+th {
+    background-color:#e6af71;
+    color: black;
+}
 
 /* Additional Styles as Needed */
-

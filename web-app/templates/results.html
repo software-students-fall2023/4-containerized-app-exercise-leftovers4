@@ -4,22 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
 </head>
 <body>
+  <div class="title">
     <h1>{{ title }}</h1>
-    <h2>Audio Results</h2>
-    <ul>
-        {% for audio in audio_results %}
-        <li>
-          {% if audio.genre %}
-            The audio submitted at {{ audio.recorded_date }} is of type {{ audio.genre }}.
-          {% else %}
-            The audio submitted at {{ audio.recorded_date }} is not done processing yet, please check again later.
-          {% endif %}
-        </li>
-        {% endfor %}
+  </div>
+    <h1>Audio Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date Recorded</th>
+                <th>Audio Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for audio in audio_results %}
+            <tr>
+                <td>{{ audio.recorded_date }}</td>
+                <td>
+                    {% if audio.genre %}
+                        {{ audio.genre }}
+                    {% else %}
+                        Not available yet
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    </ul>
-    
+    <a href="/" class="homeButton">Home</a>
 </body>
 </html>
