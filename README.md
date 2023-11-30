@@ -69,9 +69,11 @@ You should now see tha app running.
 
 ### Method 2: Access the website
 
-To try the application directly, simply access the [website](http://159.89.226.1:5000/).
+To try the application directly, simply access the [website](159.89.226.1).
 
-Or type this into your browser: http://159.89.226.1:5000/
+Or type this into your browser: 159.89.226.1
+
+It might give you a security warning since our SSL couldn't run. If using Chrome, click on advanced and choose to proceed. Then you should be able to use the system.
 
 ## Importing Starter Data?
 
