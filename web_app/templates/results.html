@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+</head>
+<body>
+  <div class="title">
+    <h1>{{ title }}</h1>
+  </div>
+    <h1>Audio Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date Recorded</th>
+                <th>Audio Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for audio in audio_results %}
+            <tr>
+                <td>{{ audio.recorded_date }}</td>
+                <td>
+                    {% if audio.genre %}
+                        {{ audio.genre }}
+                    {% else %}
+                        Not available yet
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/" class="homeButton">Home</a>
+</body>
+</html>

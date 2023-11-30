@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pylint = "*"
+black = "*"
+librosa = "*"
+flask = "*"
+numpy = "*"
+scikit-learn = "*"
+resampy = "*"
+pyaudio = "*"
+wave = "*"
+pymongo = "*"
+typing-extensions = "*"
+pytest = "*"
+python-dotenv = "*"
+coverage = "*"
+pytest-cov = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

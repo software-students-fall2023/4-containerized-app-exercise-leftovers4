@@ -1,0 +1,33 @@
+version: "3"
+services:
+  mongodb:
+    build: ./mongodb
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+  web_app:
+    build: ./web_app
+    depends_on:
+      - mongodb
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/
+      - MONGODB_DATABASE=audio
+      - MONGODB_COLLECTION=audio-collection
+
+  ml-client:
+    build: ./machine-learning-client
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/
+      - MONGODB_DATABASE=audio
+      - MONGODB_COLLECTION=audio-collection
+
+volumes:
+  mongodb-data:
